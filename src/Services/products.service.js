@@ -73,8 +73,20 @@ const create = async (productInfo) => {
 
 const updateOne = async (id, productUpdate) => {
     try {
-        const productUp = await Products.updateOne(id, productUpdate);
-        return productUp;
+        const product = await Products.getById(id);
+        if (product) {
+            const reqProp = Object.keys(productUpdate);
+            const props = ['title', 'description', 'price', 'thumbnail', 'code', 'status', 'category', 'stock'];
+            const modProp = reqProp.filter(p => props.includes(p));
+            const productUp = {};
+
+            for (const prop of modProp) {
+                productUp[prop] = productUpdate[prop];
+            }
+
+            await Products.updateOne(id, productUp);
+            return productUp;
+        }
     } catch (error) {
         throw error;
     };

@@ -5,10 +5,11 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const products = await productsService.getAll();
-        res.json({ status: 'success', payload: products })
+        const response = await productsService.getAll();
+
+        res.json({ status: 'success', response });
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error });
+        res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
 
@@ -18,7 +19,7 @@ router.get('/:pid', async (req, res) => {
         const product = await productsService.getById(pid);
         res.json({ status: 'success', payload: product });
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error });
+        res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
 
@@ -34,7 +35,7 @@ router.post('/', async (req, res) => {
             res.status(201).json({ status: 'success', payload: newProduct });
         }
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error });
+        res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
 
@@ -44,14 +45,13 @@ router.put('/:pid', async (req, res) => {
         const productUp = await productsService.updateOne(pid, req.body);
         res.status(201).json({ status: 'success', payload: productUp });
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error });
+        res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
 
 router.delete('/:pid', async (req, res) => {
     try {
         const { pid } = req.params;
-        console.log('eh?')
         const response = await productsService.deleteOne(pid);
         if (response === 200) {
             res.json({ status: 'success' })
@@ -59,7 +59,7 @@ router.delete('/:pid', async (req, res) => {
             res.status(204).json({ status: 'error', message: 'El producto que desea eliminar no existe.' });
         }
     } catch (error) {
-        res.status(500).json({ status: 'error', error: error });
+        res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
 

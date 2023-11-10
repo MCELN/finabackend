@@ -64,11 +64,9 @@ class ProductsDao {
     async updateOne(id, productUpdate) {
         try {
             const reqProp = Object.keys(productUpdate);
-            const props = ['title', 'description', 'price', 'thumbnail', 'code', 'status', 'category', 'stock'];
-            const modProp = reqProp.filter(p => props.includes(p));
             const index = this.#products.findIndex(p => p._id === id);
 
-            for (const prop of modProp) {
+            for (const prop of reqProp) {
                 this.#products[index][prop] = productUpdate[prop];
             };
             await fs.promises.writeFile(this.#path, JSON.stringify(this.#products));
