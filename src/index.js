@@ -1,6 +1,9 @@
 const app = require('./server');
 const { port } = require('./config');
+const realTimeServer = require('./realTimeServer');
 
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
     console.log(`Server running at port ${port}`)
 })
+
+realTimeServer(httpServer);

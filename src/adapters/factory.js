@@ -5,6 +5,7 @@ switch (environment) {
         module.exports = {
             ProductsDao: require('../DAOs/fs/products.dao'),
             CartsDao: require('../DAOs/fs/carts.dao'),
+            ChatDao: require('../DAOs/fs/chat.dao'),
         };
 
         break;
@@ -12,7 +13,8 @@ switch (environment) {
     case 'devmongo':
         module.exports = {
             ProductsDao: require('../DAOs/mongodb/products.dao'),
-            CartsDao: require('../DAOs/mongodb/carts.dao')
+            CartsDao: require('../DAOs/mongodb/carts.dao'),
+            ChatDao: require('../DAOs/mongodb/chat.dao'),
         };
 
         break;

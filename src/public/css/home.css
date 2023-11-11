@@ -1,0 +1,117 @@
+body {
+    background-color: rgb(7, 43, 67);
+    color: #f5f5f5;
+}
+
+h1 {
+    text-align: center;
+    font-size: 90px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: #ffffff;
+    color: black;
+    width: 300px;
+    border: 1px solid black;
+    margin: 5px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card img {
+    height: 180px;
+}
+
+.card h3 {
+    font-size: 30px;
+}
+
+.card p {
+    font-weight: bold;
+}
+
+.card span {
+    border: solid black 2px;
+    padding: 3px 10px;
+    background-color: rgb(121, 206, 121);
+}
+
+.card button {
+    padding: 5px 10px;
+    margin-top: 10px;
+    background-color: rgb(231, 195, 147);
+    color: black;
+    font-size: 20px;
+
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 70px;
+}
+
+form label {
+    margin: 7px 4px;
+    font-size: 20px;
+}
+
+form button {
+    background-color: rgb(121, 206, 121);
+    margin: auto;
+    margin-top: 40px;
+    width: 100px;
+}
+
+.checkbox {
+    margin-top: 10px;
+}
+
+.prevNext {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.prevNext a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    border: solid black 2px;
+    padding: 5px 10px;
+    background-color: rgb(121, 206, 121);
+}
+
+.carritoInProduct {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #f5f5f5;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.github {
+    display: flex;
+    justify-content: center;
+}

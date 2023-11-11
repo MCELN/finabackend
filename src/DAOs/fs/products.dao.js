@@ -48,7 +48,6 @@ class ProductsDao {
         };
     };
 
-
     async create(productInfo) {
         try {
             productInfo._id = uuidv4();

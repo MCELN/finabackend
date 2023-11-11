@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
     try {
         const response = await productsService.getAll();
 
-        res.json({ status: 'success', response });
+        res.json({ status: 'success', productLimit });
     } catch (error) {
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
