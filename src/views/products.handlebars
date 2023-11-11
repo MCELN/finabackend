@@ -1,0 +1,52 @@
+<h1>Products</h1>
+
+{{!-- {{#if flag}}
+<h2>Bienvenido!</h2>
+<ul>
+    <li>
+        {{user.first_name}} {{user.last_name}}
+    </li>
+    <li>
+        E-Mail: {{user.email}}
+    </li>
+    <li>
+        Rol: {{user.role}}
+    </li>
+</ul>
+{{else}}
+<p></p>
+{{/if}} --}}
+
+{{!-- <form action="/login" id="logout">
+    <button type="submit">Cerrar Sesión</button>
+</form> --}}
+
+{{!-- <a href="/carts/{{cid}}" class="carritoInProduct">Carrito</a> --}}
+
+<div class="container">
+    {{#each serializedMessages}}
+    <div class="card">
+        <h3>{{this.title}}</h3>
+        <img src="{{this.thumbnail}}" onerror="this.src='/asset/no-image.jpg'" alt="Product">
+        <p>{{this.description}}</p>
+        {{#if this.price}}
+        <span>Price: ${{this.price}}</span>
+        {{else}}
+        <span>Free</span>
+        {{/if}}
+        <button class="addToCart" productId="{{this._id}}" cartId="{{../cid}}">Agregar al Carrito</button>
+    </div>
+    {{/each}}
+</div>
+<div class="prevNext">
+    {{#if prevLink}}
+    <a href={{prevLink}} class="prev">Anterior</a>
+    {{/if}}
+
+    {{#if nextLink}}
+    <a href={{nextLink}} class="next">Siguiente</a>
+    {{/if}}
+</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/products.js"></script>

@@ -35,6 +35,14 @@ const paginate = async (filter, queryOption) => {
     };
 };
 
+const paginateFs = async (limit) => {
+    try {
+        return await Products.paginateFs(limit);
+    } catch (error) {
+        throw error;
+    };
+};
+
 const create = async (productInfo) => {
     try {
         const {
@@ -111,6 +119,7 @@ module.exports = {
     getById,
     getOne,
     paginate,
+    paginateFs,
     create,
     updateOne,
     deleteOne,

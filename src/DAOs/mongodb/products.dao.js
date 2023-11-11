@@ -28,6 +28,15 @@ class ProductsDao {
         };
     };
 
+    async paginate(filter, queryOption) {
+        try {
+            const result = await Products.paginate(filter, queryOption);
+            return result;
+        } catch (error) {
+            throw error;
+        };
+    };
+
     async create(productInfo) {
         try {
             await Products.create(productInfo);

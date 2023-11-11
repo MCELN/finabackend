@@ -1,13 +1,87 @@
 const { Router } = require('express');
 const productsService = require('../Services/products.service');
+const cartService = require('../Services/carts.service');
+const { environment } = require('../config')
 
 const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const response = await productsService.getAll();
+        if (environment === 'devfs') {
+            try {
+                const { limit = 10 } = req.query;
+                const serializedMessages = await productsService.paginateFs(limit);
+                res.render(
+                    'products',
+                    {
+                        serializedMessages,
+                        style: 'home.css',
+                    },
+                );
+            } catch (error) {
+                res.status(500).json({ status: 'error', error: 'Internal Error.' });
+            };
 
-        res.json({ status: 'success', productLimit });
+        } else {
+            const { limit = 10, page = 1, sort, query } = req.query;
+
+            const pageNum = parseInt(page);
+
+            let filter = {};
+
+            if (query) {
+                if (query === 'false' || query === 'true') {
+                    filter = { status: query }
+                } else {
+                    filter = { category: query };
+                }
+            }
+
+            const sortO = {};
+
+            if (sort === 'asc') {
+                sortO.price = 1;
+            } else if (sort === 'desc') {
+                sortO.price = -1;
+            }
+
+            const queryOption = {
+                limit,
+                page,
+                sort: sortO,
+            };
+
+            const products = await productsService.paginate(filter, queryOption);
+
+            const prod = products.docs;
+
+            const serializedMessages = prod.map(product => product.serialize());
+
+
+            const { prevPage, nextPage, hasPrevPage, hasNextPage } = products;
+
+
+            const prevLink = hasPrevPage ? `/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
+            const nextLink = hasNextPage ? `/products?limit=${limit}&page=${nextPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
+
+            const carts = await cartService.getAll();
+            const cid = carts[0]._id;
+
+
+            res.render(
+                'products',
+                {
+                    serializedMessages,
+                    cid,
+                    prevLink,
+                    nextLink,
+                    // user,
+                    // flag,
+                    style: 'home.css',
+                },
+            );
+        };
+
     } catch (error) {
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
