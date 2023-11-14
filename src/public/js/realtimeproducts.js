@@ -25,20 +25,28 @@ addProd.addEventListener('submit', async (e) => {
                 throw new Error('Error al agregar el producto al carrito.');
             };
         })
-        .then(function (data) {
+        .then(function () {
             socket.emit('addProd', obj);
-        })
-        .then(function (data) {
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: `El producto ${data.title} ha sido agregado.`,
-                showConfirmButton: false,
-                timer: 2000,
-            });
+
+            socket.on('newProduct', async data => {
+                try {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: `El producto ${data} ha sido agregado.`,
+                        showConfirmButton: false,
+                        timer: 2000,
+                    })
+                } catch (error) {
+                    throw new Error(`Error al agregar el producto al carrito: ${error}`);
+                }
+            })
         })
         .catch((error) => {
             throw new Error(`Error al agregar el producto al carrito: ${error}`);
         });
-    addProd.reset();
-})
+    setTimeout(() => {
+        addProd.reset();
+        location.reload();
+    }, 2000);
+});

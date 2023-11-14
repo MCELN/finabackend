@@ -49,4 +49,3 @@ const realTimeServer = (httpServer) => {
 };
 
 module.exports = realTimeServer;
-
