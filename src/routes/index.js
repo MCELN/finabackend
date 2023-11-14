@@ -2,6 +2,7 @@ const productsController = require('../Controllers/products.controller');
 const cartsController = require('../Controllers/carts.controller');
 const chatController = require('../Controllers/chat.controller');
 const rtpController = require('../Controllers/realtimeproducts.controller');
+const authController = require('../Controllers/auth.controller');
 
 const router = app => {
     app.use('/api/products', productsController);
@@ -9,6 +10,7 @@ const router = app => {
     app.use('/products', productsController);
     app.use('/chat', chatController);
     app.use('/realtimeproducts', rtpController);
+    app.use('/auth', authController);
     app.use('/*', (req, res) => {
         try {
             res.render(

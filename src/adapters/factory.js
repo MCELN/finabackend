@@ -15,6 +15,7 @@ switch (environment) {
             ProductsDao: require('../DAOs/mongodb/products.dao'),
             CartsDao: require('../DAOs/mongodb/carts.dao'),
             ChatDao: require('../DAOs/mongodb/chat.dao'),
+            UsersDao: require('../DAOs/mongodb/users.dao'),
         };
 
         break;

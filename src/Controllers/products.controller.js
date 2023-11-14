@@ -1,11 +1,12 @@
 const { Router } = require('express');
 const productsService = require('../Services/products.service');
 const cartService = require('../Services/carts.service');
-const { environment } = require('../config')
+const { environment } = require('../config');
+const { authToken } = require('../utils/jwt.util');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authToken, async (req, res) => {
     try {
         if (environment === 'devfs') {
             try {

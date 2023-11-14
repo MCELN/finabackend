@@ -1,12 +1,18 @@
 const { Router } = require('express');
 const productsService = require('../Services/products.service');
+const { environment } = require('../config');
+const { authToken } = require('../utils/jwt.util');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authToken, async (req, res) => {
     try {
         const products = await productsService.getAll();
-        const serializedMessages = products.map(product => product.serialize());
+        if (environment === 'dotfs') {
+            serializedMessages = await productsService.getAll();
+        } else {
+            serializedMessages = products.map(product => product.serialize());
+        }
 
         res.render(
             'realtimeproducts',

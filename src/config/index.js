@@ -10,4 +10,5 @@ module.exports = {
         name: process.env.DB_NAME,
         session: process.env.DB_SESSION,
     },
+    jwtKey: process.env.JWT_PRIVATE_KEY,
 }
