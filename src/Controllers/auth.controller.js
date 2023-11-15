@@ -40,7 +40,7 @@ router.post('/login', async (req, res) => {
         const token = generateToken(user._id);
 
         res
-            .header('authorization', token)
+            .cookie('authToken', token, { maxAge: 300000, httpOnly: true })
             .json({ status: 'success', payload: req.user, token });
     } catch (error) {
         console.log('login ' + error)

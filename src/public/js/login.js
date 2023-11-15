@@ -19,8 +19,7 @@ loginForm.addEventListener('submit', async (e) => {
         });
 
         const userSession = await response.json();
-
-        console.log(userSession.status);
+        console.log('userSession ' + userSession.token)
         if (userSession.status === 'success') {
             Swal.fire({
                 position: 'center',

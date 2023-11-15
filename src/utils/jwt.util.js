@@ -1,26 +1,29 @@
 const jwt = require('jsonwebtoken');
 const { jwtKey } = require('../config');
+const cookieExtractor = require('./cookie-extractor.util');
 
 const keyJwt = jwtKey;
 
 const generateToken = (user) => {
-    const token = jwt.sign({ user }, keyJwt, { expiresIn: '10m' });
+    const token = jwt.sign({ user }, keyJwt, { expiresIn: 3600 });
     return token;
 };
 
 const authToken = (req, res, next) => {
-    const authHeader = req.headers.Authorization || req.headers.authorization;
+    try {
+        const token = req.cookies.authToken;
 
-    if (!authHeader) return res.status(401).json({ status: 'error', error: 'Unauthorized' });
+        if (!token) return res.status(401).json({ status: 'error', error: 'Unauthorized' });
 
-    const token = authHeader.split(' ')[1];
+        jwt.verify(token, keyJwt, (error, credentials) => {
+            if (error) return res.status(403).json({ status: 'error', error: 'Forbidden' });
 
-    jwt.verify(token, keyJwt, (error, credentials) => {
-        if (error) return res.status(403).json({ status: 'error', error: 'Forbidden' });
-
-        req.user = credentials.user;
-        next();
-    });
+            req.user = credentials.user;
+            next();
+        });
+    } catch (error) {
+        console.log({ error })
+    }
 };
 
 module.exports = {
