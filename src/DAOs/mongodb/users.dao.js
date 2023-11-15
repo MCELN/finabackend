@@ -20,7 +20,7 @@ class UsersDao {
         };
     };
 
-    async getOne({ prop }) {
+    async getOne(prop) {
         try {
             const user = Users.findOne(prop);
             return user;

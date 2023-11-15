@@ -1,6 +1,6 @@
 class UsersDto {
     constructor(newUser) {
-        this.firs_name = newUser.firs_name;
+        this.first_name = newUser.first_name;
         this.last_name = newUser.last_name;
         this.email = newUser.email;
         this.age = newUser.age;

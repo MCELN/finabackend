@@ -11,4 +11,9 @@ module.exports = {
         session: process.env.DB_SESSION,
     },
     jwtKey: process.env.JWT_PRIVATE_KEY,
+    github: {
+        clientID: process.env.CLIENTID,
+        clientSecret: process.env.CLIENT_SECRET,
+        callbackurl: process.env.CALLBACKURL,
+    },
 }

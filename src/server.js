@@ -3,6 +3,8 @@ const router = require('./routes');
 const handlebars = require('express-handlebars');
 const MongoConnection = require('./db');
 const cookieParser = require('cookie-parser');
+const passport = require('passport');
+const initializePassport = require('./config/passport.config');
 
 const app = express();
 
@@ -14,6 +16,9 @@ app.use(cookieParser());
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/views');
+
+initializePassport();
+app.use(passport.initialize());
 
 MongoConnection.getInstance();
 

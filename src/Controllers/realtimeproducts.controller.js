@@ -2,10 +2,11 @@ const { Router } = require('express');
 const productsService = require('../Services/products.service');
 const { environment } = require('../config');
 const { authToken } = require('../utils/jwt.util');
+const protectedRouteSession = require('../middlewares/protected-route');
 
 const router = Router();
 
-router.get('/', authToken, async (req, res) => {
+router.get('/', authToken, protectedRouteSession, async (req, res) => {
     try {
         const products = await productsService.getAll();
         if (environment === 'dotfs') {

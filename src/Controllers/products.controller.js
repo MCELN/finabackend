@@ -3,6 +3,7 @@ const productsService = require('../Services/products.service');
 const cartService = require('../Services/carts.service');
 const { environment } = require('../config');
 const { authToken } = require('../utils/jwt.util');
+const protectedRouteSession = require('../middlewares/protected-route');
 
 const router = Router();
 
