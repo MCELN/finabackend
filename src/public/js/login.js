@@ -13,7 +13,6 @@ loginForm.addEventListener('submit', async (e) => {
         const response = await fetch('/auth/login', {
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             method: 'POST',
             body: JSON.stringify(obj),
@@ -21,9 +20,8 @@ loginForm.addEventListener('submit', async (e) => {
 
         const userSession = await response.json();
 
-        console.log(userSession);
-
-        if (userSession.payload.first_name) {
+        console.log(userSession.status);
+        if (userSession.status === 'success') {
             Swal.fire({
                 position: 'center',
                 icon: 'success',
@@ -41,7 +39,7 @@ loginForm.addEventListener('submit', async (e) => {
                 title: 'Error de autenticación',
                 text: 'Usuario o contraseña incorrectos',
                 showConfirmButton: false,
-                timer: 2000
+                timer: 3000
             })
                 .then(() => {
                     location.reload();

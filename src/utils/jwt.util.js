@@ -9,8 +9,8 @@ const generateToken = (user) => {
 };
 
 const authToken = (req, res, next) => {
-    console.log(req.headers);
-    const authHeader = req.headers.Authorization;
+    const authHeader = req.headers.Authorization || req.headers.authorization;
+
     if (!authHeader) return res.status(401).json({ status: 'error', error: 'Unauthorized' });
 
     const token = authHeader.split(' ')[1];
