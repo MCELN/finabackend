@@ -1,0 +1,19 @@
+<h1>Cart</h1>
+
+<a href="/products" class="carritoInProduct">Productos</a>
+
+<div class="container">
+    {{#each products}}
+    <div class="card">
+        <h3>{{ this.product.title }}</h3>
+        <img src="{{ this.product.thumbnail }}" onerror="this.src='/asset/no-image.jpg'" alt="" />
+        <p>{{ this.product.description }}</p>
+        {{#if this.product.price}}
+        <span>Price: $ {{ this.product.price }}</span>
+        {{else}}
+        <span>Free</span>
+        {{/if}}
+        <p>{{ this.quantity }} productos agregados</p>
+    </div>
+    {{/each}}
+</div>

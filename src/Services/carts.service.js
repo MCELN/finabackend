@@ -23,6 +23,14 @@ const getById = async (id) => {
     };
 };
 
+const getByIdForHandlebars = async (id) => {
+    try {
+        return await Carts.getByIdForHandlebars(id);
+    } catch (error) {
+        throw error;
+    };
+};
+
 const create = async (cartInfo) => {
     try {
         const newCart = new CartsDto(cartInfo);
@@ -99,6 +107,7 @@ const deleteAllProd = async (id) => {
 module.exports = {
     getAll,
     getById,
+    getByIdForHandlebars,
     create,
     updateOne,
     deleteOneProd,

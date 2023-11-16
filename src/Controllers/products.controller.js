@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const productsService = require('../Services/products.service');
 const cartService = require('../Services/carts.service');
+const userService = require('../Services/users.service');
 const { environment } = require('../config');
 const { authToken } = require('../utils/jwt.util');
 const protectedRouteSession = require('../middlewares/protected-route');
@@ -25,9 +26,14 @@ router.get('/', authToken, async (req, res) => {
             };
 
         } else {
-            const { limit = 10, page = 1, sort, query } = req.query;
 
-            const pageNum = parseInt(page);
+            const user = await userService.getByIdForHandlebars(req.user._id);
+            const cart = await cartService.getById(user.cart)
+            const cid = cart._id;
+
+            const flag = (user.counter === 1);
+
+            const { limit = 10, page = 1, sort, query } = req.query;
 
             let filter = {};
 
@@ -66,9 +72,6 @@ router.get('/', authToken, async (req, res) => {
             const prevLink = hasPrevPage ? `/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
             const nextLink = hasNextPage ? `/products?limit=${limit}&page=${nextPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
 
-            const carts = await cartService.getAll();
-            const cid = carts[0]._id;
-
 
             res.render(
                 'products',
@@ -77,8 +80,7 @@ router.get('/', authToken, async (req, res) => {
                     cid,
                     prevLink,
                     nextLink,
-                    // user,
-                    // flag,
+                    user,
                     style: 'home.css',
                 },
             );

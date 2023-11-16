@@ -23,6 +23,15 @@ const getById = async (id) => {
     };
 };
 
+const getByIdForHandlebars = async (id) => {
+    try {
+        const user = await Users.getByIdForHandlebars(id);
+        return user;
+    } catch (error) {
+        throw error;
+    };
+};
+
 const getOne = async (prop) => {
     try {
         const user = await Users.getOne(prop);
@@ -73,6 +82,7 @@ module.exports = {
     getAll,
     getById,
     getOne,
+    getByIdForHandlebars,
     updateOne,
     create,
 }

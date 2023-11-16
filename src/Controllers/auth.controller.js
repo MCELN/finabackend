@@ -37,15 +37,15 @@ router.post('/login', async (req, res) => {
             first_name: user.first_name,
             email: user.email,
             role: user.role,
+            counter: 0,
         };
 
         const token = generateToken(req.user);
 
         res
-            .cookie('authToken', token, { maxAge: 300000, httpOnly: true })
+            .cookie('authToken', token, { maxAge: 3600000, httpOnly: true })
             .json({ status: 'success', payload: req.user, token });
     } catch (error) {
-        console.log('login ' + error)
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -104,5 +104,15 @@ router.get('/githubcallback',
         };
     },
 );
+
+router.delete('/logout', async (req, res) => {
+    try {
+        res.clearCookie('authToken');
+        req.user = null;
+        res.status(200).json({ status: 'success', message: 'Logout successful' });
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    };
+});
 
 module.exports = router;

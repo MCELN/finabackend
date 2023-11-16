@@ -29,6 +29,15 @@ class UsersDao {
         };
     };
 
+    async getByIdForHandlebars(id) {
+        try {
+            const user = Users.findById(id).lean();
+            return user;
+        } catch (error) {
+            throw error;
+        };
+    };
+
     async updateOne(id, userInfo) {
         try {
             return await Users.updateOne({ _id: id }, { $set: userInfo });

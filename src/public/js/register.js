@@ -19,7 +19,6 @@ registerForm.addEventListener('submit', async (e) => {
         });
 
         const newUser = await response.json();
-        console.log('register.js ' + newUser)
 
         if (newUser.status === 'success') {
             Swal.fire({

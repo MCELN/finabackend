@@ -1,5 +1,4 @@
 const Carts = require('./models/carts.model');
-const CartsDto = require('../../DTOs/carts.dto');
 
 class CartsDao {
 
@@ -16,6 +15,14 @@ class CartsDao {
         try {
             const cart = await Carts.findById(id);
             return cart;
+        } catch (error) {
+            throw error;
+        };
+    };
+
+    async getByIdForHandlebars(id) {
+        try {
+            return await Carts.findById(id).lean();
         } catch (error) {
             throw error;
         };

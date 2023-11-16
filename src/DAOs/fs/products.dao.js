@@ -50,7 +50,6 @@ class ProductsDao {
 
     async paginateFs(limit) {
         try {
-            console.log(limit);
             const result = limit ? this.#products.slice(0, limit) : products;
             return result;
         } catch (error) {

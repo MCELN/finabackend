@@ -1,6 +1,6 @@
 <h1>Products</h1>
 
-{{!-- {{#if flag}}
+{{#if flag}}
 <h2>Bienvenido!</h2>
 <ul>
     <li>
@@ -15,13 +15,13 @@
 </ul>
 {{else}}
 <p></p>
-{{/if}} --}}
+{{/if}}
 
-{{!-- <form action="/login" id="logout">
+<form action="/login" id="logout">
     <button type="submit">Cerrar Sesión</button>
-</form> --}}
+</form>
 
-{{!-- <a href="/carts/{{cid}}" class="carritoInProduct">Carrito</a> --}}
+<a href="/api/carts/{{cid}}" class="carritoInProduct">Carrito</a>
 
 <div class="container">
     {{#each serializedMessages}}

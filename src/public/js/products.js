@@ -1,30 +1,30 @@
-// const logout = document.getElementById('logout');
+const logout = document.getElementById('logout');
 const addToCartButtons = document.querySelectorAll('.addToCart');
 
-// logout.addEventListener('click', async (e) => {
-//     e.preventDefault();
-//     try {
-//         const response = fetch('/login', {
-//             method: 'DELETE',
-//         });
+logout.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch('/auth/logout', {
+            method: 'DELETE',
+        });
 
-//         if (response.ok) {
-//             Swal.fire({
-//                 position: 'center',
-//                 icon: 'success',
-//                 title: 'Te esperamos pronto!',
-//                 showConfirmButton: false,
-//                 timer: 2000,
-//             })
-//                 .then(() => {
-//                     window.location.href = '/login';
-//                 });
-//         };
+        if (response.ok) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Te esperamos pronto!',
+                showConfirmButton: false,
+                timer: 2000,
+            })
+                .then(() => {
+                    window.location.href = '/auth/login';
+                });
+        };
 
-//     } catch (error) {
-//         console.log('Error al cerrar session', error);
-//     };
-// });
+    } catch (error) {
+        console.log('Error al cerrar session', error);
+    };
+});
 
 addToCartButtons.forEach(function (button) {
     button.addEventListener('click', async function () {
@@ -47,17 +47,34 @@ addToCartButtons.forEach(function (button) {
                     throw new Error('Error al agregar el producto al carrito.');
                 };
             })
-            .then(function (data) {
+            .then(response => {
+                if (response.message === 'notstock') {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
+                        title: 'Producto no se encuentra en stock.',
+                        showConfirmButton: false,
+                        timer: 2500,
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: `${response.payload}`,
+                        showConfirmButton: false,
+                        timer: 2700,
+                    });
+                }
+            })
+            .catch(function (error) {
                 Swal.fire({
                     position: 'top-end',
-                    icon: 'success',
-                    title: 'Producto agregado al carrito con éxito!',
+                    icon: 'error',
+                    title: `${error}`,
                     showConfirmButton: false,
                     timer: 2000,
                 });
-            })
-            .catch(function (error) {
-                alert(error.message);
             });
+
     });
 });
