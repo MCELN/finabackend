@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const cartService = require('../Services/carts.service');
 const { authToken } = require('../utils/jwt.util');
+const protectedRouteCart = require('../middlewares/protected-route-cart');
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
     };
 });
 
-router.get('/:cid', authToken, async (req, res) => {
+router.get('/:cid', authToken, protectedRouteCart, async (req, res) => {
     try {
         const { cid } = req.params;
         const cartProducts = await cartService.getByIdForHandlebars(cid);
