@@ -6,9 +6,11 @@ class UsersDto {
         this.age = newUser.age;
         this.password = newUser.password;
         this.cart = newUser.cart;
+        this.verify = newUser.verify;
+        this.verified = newUser.verified;
         this.status = newUser.status || true;
         this.role = newUser.role || 'user';
-        this.date = newUser.date || Date.now();
+        this.createdAt = newUser.createdAt || Date.now();
     };
 };
 

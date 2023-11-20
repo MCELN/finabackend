@@ -16,4 +16,8 @@ module.exports = {
         clientSecret: process.env.CLIENT_SECRET,
         callbackurl: process.env.CALLBACKURL,
     },
+    mailer: {
+        userMail: process.env.USER_MAIL,
+        passMail: process.env.PASSWORD_MAIL,
+    },
 }

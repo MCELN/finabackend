@@ -1,5 +1,8 @@
+const userService = require('../Services/users.service');
+
 const protectedRouteSession = async (req, res, next) => {
-    if (req.user && req.user.role === 'admin') {
+    const user = await userService.getById(req.user._id)
+    if (user && user.role === 'admin') {
         next();
     } else {
         return res.status(403).redirect('/products');

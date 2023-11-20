@@ -14,7 +14,9 @@ const userSchema = new mongoose.Schema({
     cart: String,
     status: Boolean,
     role: String,
-    date: {
+    verify: String,
+    verified: Boolean,
+    createdAt: {
         type: Date,
         default: Date.now(),
     },
@@ -31,7 +33,7 @@ userSchema.methods.serialize = function () {
         cart: this.cart,
         status: this.status,
         role: this.role,
-        date: this.date,
+        createdAt: this.date,
     };
 };
 

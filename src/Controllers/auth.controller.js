@@ -35,9 +35,6 @@ router.post('/login', async (req, res) => {
         req.user = {
             _id: user._id,
             first_name: user.first_name,
-            email: user.email,
-            role: user.role,
-            counter: 0,
         };
 
         const token = generateToken(req.user);
@@ -104,6 +101,29 @@ router.get('/githubcallback',
         };
     },
 );
+
+router.get('/verify/:email/:verify', async (req, res) => {
+    try {
+        const { email, verify } = req.params;
+
+        await userService.verifyMail(email, verify);
+        const user = await userService.getOne({ email });
+
+        const { first_name, last_name } = user;
+
+        res.render(
+            'verify',
+            {
+                first_name,
+                last_name,
+                style: 'home.css',
+
+            },
+        );
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    }
+})
 
 router.delete('/logout', async (req, res) => {
     try {

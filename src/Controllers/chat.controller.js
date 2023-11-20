@@ -1,8 +1,9 @@
 const { Router } = require('express');
+const { authToken } = require('../utils/jwt.util');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authToken, async (req, res) => {
     try {
         res.render('chat');
     } catch (error) {
