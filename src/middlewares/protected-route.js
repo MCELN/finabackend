@@ -1,6 +1,6 @@
 const userService = require('../Services/users.service');
 
-const protectedRouteSession = async (req, res, next) => {
+const protectedRouteAdmin = async (req, res, next) => {
     const user = await userService.getById(req.user._id)
     if (user && user.role === 'admin') {
         next();
@@ -9,4 +9,4 @@ const protectedRouteSession = async (req, res, next) => {
     };
 };
 
-module.exports = protectedRouteSession;
+module.exports = protectedRouteAdmin;

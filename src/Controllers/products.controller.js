@@ -29,6 +29,8 @@ router.get('/', authToken, async (req, res) => {
             const user = await userService.getByIdForHandlebars(req.user._id);
             const cart = await cartService.getById(user.cart)
             const cid = cart._id;
+            const verified = user.verified;
+            console.log(verified);
 
             const flag = (user.counter === 1);
 
@@ -76,6 +78,7 @@ router.get('/', authToken, async (req, res) => {
                 'products',
                 {
                     serializedMessages,
+                    verified,
                     cid,
                     prevLink,
                     nextLink,
