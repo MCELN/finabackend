@@ -30,7 +30,6 @@ router.get('/', authToken, async (req, res) => {
             const cart = await cartService.getById(user.cart)
             const cid = cart._id;
             const verified = user.verified;
-            console.log(verified);
 
             const flag = (user.counter === 1);
 
@@ -122,6 +121,8 @@ router.post('/', async (req, res) => {
 router.put('/:pid', async (req, res) => {
     try {
         const { pid } = req.params;
+        if (req.body.stock) req.body.stock = parseInt(req.body.stock);
+        if (req.body.price) req.body.price = parseInt(req.body.price);
         const productUp = await productsService.updateOne(pid, req.body);
         res.status(201).json({ status: 'success', payload: productUp });
     } catch (error) {

@@ -91,9 +91,8 @@ const updateOne = async (id, productUpdate) => {
             for (const prop of modProp) {
                 productUp[prop] = productUpdate[prop];
             }
-
-            await Products.updateOne(id, productUp);
-            return productUp;
+            const editProduct = await Products.updateOne(id, productUp);
+            return editProduct;
         }
     } catch (error) {
         throw error;

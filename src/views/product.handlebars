@@ -1,0 +1,55 @@
+<h1>Real time Products</h1>
+
+<h2>Product Edit</h2>
+
+<form action="/realtimeproducts">
+    <button type="submit">Volver</button>
+</form>
+
+<div class="container">
+    <div class="card">
+        <h3>{{serializedMessages.title}}</h3>
+        <img src="{{serializedMessages.thumbnail}}" onerror="this.src='/assets/no-image.jpg'" alt="Img Product">
+        <p>{{serializedMessages.description}}</p>
+        {{#if serializedMessages.price}}
+        <span>Price: ${{serializedMessages.price}}</span>
+        {{else}}
+        <span>Free</span>
+        {{/if}}
+        <span>stock: {{serializedMessages.stock}}</span>
+    </div>
+</div>
+
+<form id="deleteProd" data-pid="{{pid}}">
+    <button type="submit"> Eliminar </button>
+</form>
+
+<form id="editProduct" data-pid="{{pid}}">
+
+    <label for="title">Título</label>
+    <input type="text" name="title">
+
+    <label for="description">Descripción</label>
+    <input type="text" name="description">
+
+    <label for="thumbnail">URL Imagen</label>
+    <input type="text" name="thumbnail">
+
+    <label for="code">Código</label>
+    <input type="text" name="code">
+
+    <label for="category">Categoría</label>
+    <input type="text" name="category">
+
+    <label for="price">Precio</label>
+    <input type="number" name="price">
+
+    <label for="stock">Stock</label>
+    <input type="number" name="stock">
+
+    <button type="submit">Editar Producto</button>
+</form>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtimeeditproduct.js"></script>

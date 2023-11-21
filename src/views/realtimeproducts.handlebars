@@ -4,16 +4,20 @@
 
 <div class="container">
     {{#each serializedMessages}}
-    <div class="card">
-        <h3>{{this.title}}</h3>
-        <img src="{{this.thumbnail}}" onerror="this.src='/assets/no-image.jpg'" alt="Img Product">
-        <p>{{this.description}}</p>
-        {{#if this.price}}
-        <span>Price: ${{this.price}}</span>
-        {{else}}
-        <span>Free</span>
-        {{/if}}
-    </div>
+    <a href="/realtimeproducts/{{this._id}}">
+        <div class="card">
+            <h3>{{this.title}}</h3>
+            <img src="{{this.thumbnail}}" onerror="this.src='/assets/no-image.jpg'" alt="Img Product">
+            <p>{{this.description}}</p>
+            {{#if this.price}}
+            <span>Price: ${{this.price}}</span>
+            {{else}}
+            <span>Free</span>
+            {{/if}}
+            <br>
+            <span>Stock: {{this.stock}}</span>
+        </div>
+    </a>
     {{/each}}
 </div>
 

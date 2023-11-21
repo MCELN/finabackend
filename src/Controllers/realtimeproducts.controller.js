@@ -27,4 +27,25 @@ router.get('/', authToken, protectedRouteAdmin, async (req, res) => {
     };
 });
 
+router.get('/:pid', authToken, protectedRouteAdmin, async (req, res) => {
+    try {
+        const { pid } = req.params;
+        const product = await productsService.getById(pid)
+        const serializedMessages = product.serialize();
+
+        res.render(
+            'product',
+            {
+                product,
+                serializedMessages,
+                pid,
+                style: 'home.css',
+            },
+        );
+
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    }
+})
+
 module.exports = router;
