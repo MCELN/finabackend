@@ -3,10 +3,11 @@ const userService = require('../Services/users.service');
 const { comparePassword } = require('../utils/bcrypt.util');
 const { generateToken } = require('../utils/jwt.util');
 const passport = require('passport');
+const protectedRouteLogin = require('../middlewares/protected-route-login');
 
 const router = Router();
 
-router.get('/login', (req, res) => {
+router.get('/login', protectedRouteLogin, (req, res) => {
     try {
         res.render(
             'login',
@@ -47,7 +48,7 @@ router.post('/login', async (req, res) => {
     };
 });
 
-router.get('/register', async (req, res) => {
+router.get('/register', protectedRouteLogin, async (req, res) => {
     try {
         res.render(
             'register',

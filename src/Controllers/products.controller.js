@@ -28,6 +28,7 @@ router.get('/', authToken, async (req, res) => {
 
             const user = await userService.getByIdForHandlebars(req.user._id);
             const cart = await cartService.getById(user.cart)
+            const userAdmin = user.role === 'admin';
             const cid = cart._id;
             const verified = user.verified;
 
@@ -82,6 +83,7 @@ router.get('/', authToken, async (req, res) => {
                     prevLink,
                     nextLink,
                     user,
+                    userAdmin,
                     style: 'home.css',
                 },
             );

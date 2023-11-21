@@ -17,6 +17,13 @@
 <p></p>
 {{/if}}
 
+{{#if userAdmin}}
+<form action="/realtimeproducts">
+    <button type="submit">Administrar productos</button>
+</form>
+<br>
+{{/if}}
+
 <form action="/login" id="logout">
     <button type="submit">Cerrar Sesión</button>
 </form>
