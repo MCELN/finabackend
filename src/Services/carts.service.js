@@ -1,6 +1,7 @@
 const { CartsDao } = require('../adapters/factory');
 const CartsDto = require('../DTOs/carts.dto');
 const productsService = require('../Services/products.service');
+const usersService = require('../Services/users.service');
 const { environment } = require('../config')
 
 const Carts = new CartsDao();
@@ -54,7 +55,6 @@ const updateOne = async (id, pid, qty) => {
         if (index >= 0) {
             if (product.stock >= qty) {
                 await Carts.updateOne(id, pid, totalProd);
-                await productsService.updateOne(pid, { stock: (product.stock - qty) });
                 return `Se ${qty > 1 ? 'han' : 'ha'} agregado ${qty} ${qty > 1 ? 'unidades' : 'unidad'} de ${product.title} a su carrito.`;
             } else {
                 return 'notstock';
@@ -67,7 +67,6 @@ const updateOne = async (id, pid, qty) => {
                 };
 
                 await Carts.updateOne(id, pid, qty, newProduct);
-                await productsService.updateOne(pid, { stock: (product.stock - qty) });
                 return `Se ${qty > 1 ? 'han' : 'ha'} agregado ${qty} ${qty > 1 ? 'unidades' : 'unidad'} de ${product.title} a su carrito.`;
             } else {
                 return 'notstock';
@@ -83,9 +82,13 @@ const deleteOneProd = async (id, pid) => {
     try {
         const cart = await Carts.getById(id);
         const product = await productsService.getById(pid);
+
         if (!cart || !product) return 401;
+
         await Carts.deleteOneProd(id, pid);
+
         return `El producto ${product.title} ha sido eliminado de su carrito.`
+
     } catch (error) {
         throw error;
     };
@@ -102,6 +105,48 @@ const deleteAllProd = async (id) => {
     };
 };
 
+const purchase = async (cid, uid) => {
+    try {
+        const user = await usersService.getById(uid);
+        const cart = await Carts.getById(cid);
+        const allProducts = await productsService.getAll();
+        const notStock = [];
+        const pay = [];
+        const subtotal = [];
+
+        cart.products.forEach(async prod => {
+            const product = allProducts.find(p => p._id.toString() === prod.product._id.toString());
+            if (product && product.stock >= prod.quantity) {
+                pay.push(prod);
+                await productsService.updateOne(product._id, { stock: (product.stock - prod.quantity) })
+            } else if (product) {
+                notStock.push(prod);
+            }
+        });
+
+
+        if (pay.length > 0) {
+            pay.forEach(async prod => {
+                const product = {
+                    title: prod.product.title,
+                    price: prod.product.price,
+                    quantity: prod.quantity,
+                    subtotal: prod.product.price * prod.quantity,
+                };
+
+                subtotal.push(product);
+
+                await Carts.deleteOneProd(cid, prod.product._id.toString());
+            });
+
+            console.log(subtotal);
+        }
+
+    } catch (error) {
+        throw error;
+    };
+};
+
 
 
 module.exports = {
@@ -112,4 +157,5 @@ module.exports = {
     updateOne,
     deleteOneProd,
     deleteAllProd,
+    purchase,
 }

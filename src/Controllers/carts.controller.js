@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const cartService = require('../Services/carts.service');
+const ticketsService = require('../Services/tickets.service');
+const usersService = require('../Services/users.service');
 const { authToken } = require('../utils/jwt.util');
 const protectedRouteCart = require('../middlewares/protected-route-cart');
 
@@ -21,10 +23,12 @@ router.get('/:cid', authToken, protectedRouteCart, async (req, res) => {
         const products = cartProducts.products;
 
 
+
         res.render(
             'cart',
             {
                 products,
+                cid,
                 style: "home.css",
             });
     } catch (error) {
@@ -41,7 +45,7 @@ router.post('/', async (req, res) => {
     };
 });
 
-router.put('/:cid/products/:pid', async (req, res) => {
+router.put('/:cid/products/:pid', authToken, protectedRouteCart, async (req, res) => {
     try {
         const { cid, pid } = req.params;
         const qty = req.body.quantity;
@@ -51,6 +55,17 @@ router.put('/:cid/products/:pid', async (req, res) => {
         if (response === 'notstock') return res.json({ status: 'success', message: 'notstock' });
 
         res.status(201).json({ status: 'succes', payload: response });
+    } catch (error) {
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    };
+});
+
+router.get('/:cid/purchase', authToken, protectedRouteCart, async (req, res) => {
+    try {
+        const { cid } = req.params;
+        const uid = req.user._id;
+        const response = await ticketsService.purchase(cid, uid);
+        res.json({ status: 'success', message: 'pasó.' })
     } catch (error) {
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
