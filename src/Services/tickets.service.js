@@ -1,21 +1,42 @@
 const { TicketsDao } = require('../adapters/factory');
+const TicketsDto = require('../DTOs/ticket.dto');
 const cartsService = require('../Services/carts.service');
 const productsService = require('../Services/products.service');
 const usersService = require('../Services/users.service');
 
 const Tickets = new TicketsDao();
 
-const purchase = async (cid, uid) => {
+const create = async (uid, ticketInfo) => {
     try {
         const user = await usersService.getById(uid);
+        if (user) {
+            const newTicket = {
+                amount: ticketInfo.total,
+                purchaser: user.email,
+            };
+
+            const ticket = new TicketsDto(newTicket);
+
+            const response = await Tickets.create(ticket);
+            return response;
+        };
+
+        return 'El usuario no existe.';
+    } catch (error) {
+        throw error;
+    };
+};
+
+const purchase = async (cid) => {
+    try {
         const cart = await cartsService.getById(cid);
         const allProducts = await productsService.getAll();
         const notStock = [];
         const pay = [];
-        const purchasedProducts = [];
-        const total = {
+        const purchasedProducts = {
+            products: [],
             total: 0,
-        }
+        };
 
         cart.products.forEach(async prod => {
             const product = allProducts.find(p => p._id.toString() === prod.product._id.toString());
@@ -37,13 +58,14 @@ const purchase = async (cid, uid) => {
                     subtotal: prod.product.price * prod.quantity,
                 };
 
-                total.total += product.subtotal;
+                purchasedProducts.total += product.subtotal;
 
-                purchasedProducts.push(product);
+                purchasedProducts.products.push(product);
 
                 await cartsService.deleteOneProd(cid, prod.product._id.toString());
             });
-            purchasedProducts.push(total);
+
+            return purchasedProducts;
         }
 
     } catch (error) {
@@ -52,5 +74,6 @@ const purchase = async (cid, uid) => {
 };
 
 module.exports = {
+    create,
     purchase,
 };

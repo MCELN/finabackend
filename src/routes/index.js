@@ -13,12 +13,7 @@ const router = app => {
     app.use('/auth', authController);
     app.use('/*', (req, res) => {
         try {
-            res.render(
-                'notfound',
-                {
-                    style: 'notfound.css',
-                }
-            )
+            res.redirect('/products');
         } catch (error) {
             res.status(500).json({ status: 'error', error: 'Internal error' })
         }

@@ -21,12 +21,14 @@ router.get('/:cid', authToken, protectedRouteCart, async (req, res) => {
         const { cid } = req.params;
         const cartProducts = await cartService.getByIdForHandlebars(cid);
         const products = cartProducts.products;
+        const flag = (products.length > 0);
 
 
 
         res.render(
             'cart',
             {
+                flag,
                 products,
                 cid,
                 style: "home.css",
@@ -60,12 +62,13 @@ router.put('/:cid/products/:pid', authToken, protectedRouteCart, async (req, res
     };
 });
 
-router.get('/:cid/purchase', authToken, protectedRouteCart, async (req, res) => {
+router.post('/:cid/purchase', authToken, protectedRouteCart, async (req, res) => {
     try {
         const { cid } = req.params;
-        const uid = req.user._id;
-        const response = await ticketsService.purchase(cid, uid);
-        res.json({ status: 'success', message: 'pasó.' })
+        const { _id } = req.user;
+        const dataTicket = await ticketsService.purchase(cid);
+        const ticket = await ticketsService.create(_id, dataTicket);
+        res.json({ status: 'success', payload: ticket })
     } catch (error) {
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };

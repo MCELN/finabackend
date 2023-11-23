@@ -19,5 +19,13 @@
     {{/each}}
 </div>
 
+{{#if flag}}
+<div class="buttonPay">
+    <button class="payProducts" cartId="{{cid}}">Pagar</button>
+</div>
+{{/if}}
+
+
+
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/cart.js"></script>

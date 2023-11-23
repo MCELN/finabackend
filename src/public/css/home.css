@@ -123,5 +123,18 @@ form button {
     color: rgb(255, 255, 255);
     font-weight: bold;
     font-size: 20px;
+}
 
+.payProducts {
+    padding: 5px 10px;
+    background-color: rgb(94, 78, 238);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.buttonPay {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
 }
