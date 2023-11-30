@@ -58,7 +58,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Products"
 
-    post:
+    put:
       summary: "Crea un nuevo producto"
       tags:
         - "Products"
