@@ -72,8 +72,8 @@ const create = async (userInfo) => {
         userInfo.verify = uuidv4();
         userInfo.verified = false;
 
-        const pass = getHashPassword(password);
-        userInfo.password = pass;
+        const hashedPassword = getHashPassword(password);
+        userInfo.password = hashedPassword;
 
         const newUser = new UsersDto(userInfo);
         const user = await Users.create(newUser);
@@ -86,7 +86,7 @@ const create = async (userInfo) => {
             subject: `Bienvenido a nuestra web, ${user.first_name}!!!`,
             html: `
                 <div>
-                    <h1>Gracias por elegirno ${user.first_name}!!</h1>
+                    <h1>Gracias por elegirnos ${user.first_name}!!</h1>
                     <p>Para poder comprar nuestros productos es necesario verificar tu correo electrónico.</p>
                     <p>Sólo debes seguir el enlace en el botón VERIFICAR CORREO</p>
                     <a href="${verifyLink}" style="text-decoration: none;">

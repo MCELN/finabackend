@@ -1,0 +1,177 @@
+openapi: "3.0.0"
+info:
+  title: "API Products"
+  version: "3.0.0"
+
+paths:
+  /products:
+    get:
+      summary: "Obtiene todos los productos si el usuario está logueado"
+      tags:
+        - "Products"
+      responses:
+        "200":
+          description: "success"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Products"
+
+    post:
+      summary: "Crea un nuevo producto"
+      tags:
+        - "Products"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/reqBody/createProduct"
+
+      responses:
+        "201":
+          description: "success"
+          content:
+            application/json:
+              schema:
+              $ref: "#/components/schemas/Products"
+
+  /products/{pid}:
+    get:
+      summary: "Obtiene un producto por su id"
+      tags:
+        - "Products"
+      parameters:
+        - name: "pid"
+          in: "path"
+          description: "Id del producto"
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Products"
+
+    post:
+      summary: "Crea un nuevo producto"
+      tags:
+        - "Products"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/reqBody/createProduct"
+
+      responses:
+        "201":
+          description: "success"
+          content:
+            application/json:
+              schema:
+              $ref: "#/components/schemas/Products"
+  
+    delete:
+      summary: "Elimina un producto por su id"
+      tags:
+        - "Products"
+      parameters:
+        - name: "pid"
+          in: "path"
+          description: "Id del producto"
+          required: true
+          schema:
+            $type: string
+      responses:
+        "201":
+          description: "success"
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Id de mongo"
+        title:
+          type: string
+          description: "Nombre del producto"
+        description:
+          type: string
+          description: "Descripción del producto"
+        price:
+          type: number
+          description: "Precio del producto"
+        thumbnail:
+          type: array
+          items:
+            type: string
+          description: "Url de la imagen"
+        code:
+          type: string
+          description: "Código del producto"
+        status:
+          type: boolean
+          description: "Estado del producto"
+        category:
+          type: string
+          description: "Categoría del producto"
+        stock:
+          type: number
+          description: "Stock del producto"
+
+      example:
+        _id: "ObjectId('faewihjfoewfAWESF9a3hfu87')"
+        title: "Windows 11"
+        description: "Windows 11 Dark"
+        price: 2500
+        thumbnail: ["https://www.microsoft.com/en-us/microsoft-365/blog/wp-content/uploads/sites/2/2021/06/WIN_CML_Start_Dark_16x9_en-US.png", "https://example.com/image2.jpg"]
+        code: "foi32rfh293nr2389y2y8hfdbfwqehuqw"
+        category: "Sistema Operativo"
+        status: true
+        stock: 10
+
+  reqBody:
+    createProduct:
+      description: "Crea un nuevo producto"
+      properties:
+        title:
+          type: string
+          description: "Nombre del producto"
+        description:
+          type: string
+          description: "Descripción del producto"
+        price:
+          type: number
+          description: "Precio del producto"
+        thumbnail:
+          type: array
+          items:
+            type: string
+          description: "Url de la imagen"
+        code:
+          type: string
+          description: "Código del producto"
+        status:
+          type: boolean
+          description: "Estado del producto"
+        category:
+          type: string
+          description: "Categoría del producto"
+
+      example:
+        title: "Windows 11"
+        description: "Windows 11 Dark"
+        price: 2500
+        thumbnail: ["https://www.microsoft.com/en-us/microsoft-365/blog/wp-content/uploads/sites/2/2021/06/WIN_CML_Start_Dark_16x9_en-US.png", "https://example.com/image2.jpg"]
+        code: "foi32rfh293nr2389y2y8hfdbfwqehuqw"
+        category: "Sistema Operativo"
+        status: true
+        stock: 10
