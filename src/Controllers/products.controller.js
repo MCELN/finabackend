@@ -2,94 +2,77 @@ const { Router } = require('express');
 const productsService = require('../Services/products.service');
 const cartService = require('../Services/carts.service');
 const userService = require('../Services/users.service');
-const { environment } = require('../config');
+const { isValidObjectId } = require('mongoose');
 const { authToken } = require('../utils/jwt.util');
 
 const router = Router();
 
 router.get('/', authToken, async (req, res) => {
     try {
-        if (environment === 'devfs') {
-            try {
-                const { limit = 10 } = req.query;
-                const serializedMessages = await productsService.paginateFs(limit);
-                res.render(
-                    'products',
-                    {
-                        serializedMessages,
-                        style: 'home.css',
-                    },
-                );
-            } catch (error) {
-                res.status(500).json({ status: 'error', error: 'Internal Error.' });
+        const user = await userService.getByIdForHandlebars(req.user._id);
+        const cart = await cartService.getById(user.cart)
+        const userAdmin = user && user.role === 'admin';
+        const userUser = user && user.role === 'user';
+        const cid = cart && cart._id;
+        const verified = user.verified;
+
+        const { limit = 10, page = 1, sort, query } = req.query;
+
+        let filter = {};
+
+        if (query) {
+            if (query === 'false' || query === 'true') {
+                filter = { status: query }
+            } else {
+                filter = { category: query };
             };
-
-        } else {
-
-            const user = await userService.getByIdForHandlebars(req.user._id);
-            const cart = await cartService.getById(user.cart)
-            const userAdmin = user.role === 'admin';
-            const cid = cart._id;
-            const verified = user.verified;
-
-            const flag = (user.counter === 1);
-
-            const { limit = 10, page = 1, sort, query } = req.query;
-
-            let filter = {};
-
-            if (query) {
-                if (query === 'false' || query === 'true') {
-                    filter = { status: query }
-                } else {
-                    filter = { category: query };
-                }
-            }
-
-            const sortO = {};
-
-            if (sort === 'asc') {
-                sortO.price = 1;
-            } else if (sort === 'desc') {
-                sortO.price = -1;
-            }
-
-            const queryOption = {
-                limit,
-                page,
-                sort: sortO,
-            };
-
-            const products = await productsService.paginate(filter, queryOption);
-
-            const prod = products.docs;
-
-            const serializedMessages = prod.map(product => product.serialize());
-
-
-            const { prevPage, nextPage, hasPrevPage, hasNextPage } = products;
-
-
-            const prevLink = hasPrevPage ? `/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
-            const nextLink = hasNextPage ? `/products?limit=${limit}&page=${nextPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
-
-
-            res.render(
-                'products',
-                {
-                    serializedMessages,
-                    verified,
-                    cid,
-                    prevLink,
-                    nextLink,
-                    user,
-                    userAdmin,
-                    style: 'home.css',
-                },
-            );
         };
 
+        const sortO = {};
+
+        if (sort === 'asc') {
+            sortO.price = 1;
+        } else if (sort === 'desc') {
+            sortO.price = -1;
+        };
+
+        const queryOption = {
+            limit,
+            page,
+            sort: sortO,
+        };
+
+        const products = await productsService.paginate(filter, queryOption);
+
+        const prod = products.docs;
+
+        const serializedMessages = prod.map(product => product.serialize());
+
+
+        const { prevPage, nextPage, hasPrevPage, hasNextPage } = products;
+
+
+        const prevLink = hasPrevPage ? `/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
+        const nextLink = hasNextPage ? `/products?limit=${limit}&page=${nextPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
+
+
+        res.render(
+            'products',
+            {
+                serializedMessages,
+                verified,
+                cid,
+                prevLink,
+                nextLink,
+                user,
+                userAdmin,
+                userUser,
+                style: 'home.css',
+            },
+        );
+
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -97,9 +80,23 @@ router.get('/', authToken, async (req, res) => {
 router.get('/:pid', async (req, res) => {
     try {
         const { pid } = req.params;
+
+        if (!isValidObjectId(pid)) {
+            req.logger.error('El id no es válido');
+            res.status(401).json({ status: 'error', message: 'El id no es válido.' });
+            return
+        };
+
         const product = await productsService.getById(pid);
+
+        if (!product) {
+            req.logger.warning('El producto no existe');
+            res.status(401).json({ status: 'error', message: 'El producto no existe.' });
+            return
+        };
         res.json({ status: 'success', payload: product });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -114,7 +111,7 @@ router.post('/', async (req, res) => {
             res.status(401).json({ status: 'error', message: 'Faltan campos obligatorios.' });
         } else {
             res.status(201).json({ status: 'success', payload: newProduct });
-        }
+        };
     } catch (error) {
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
@@ -137,7 +134,7 @@ router.delete('/:pid', async (req, res) => {
         const { pid } = req.params;
         const response = await productsService.deleteOne(pid);
         if (response === 200) {
-            res.json({ status: 'success' })
+            res.json({ status: 'success' });
         } else {
             res.status(204).json({ status: 'error', message: 'El producto que desea eliminar no existe.' });
         }

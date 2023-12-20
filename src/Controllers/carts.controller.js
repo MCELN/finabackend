@@ -67,9 +67,11 @@ router.post('/:cid/purchase', authToken, protectedRouteCart, async (req, res) =>
         const { cid } = req.params;
         const { _id } = req.user;
         const dataTicket = await ticketsService.purchase(cid);
+        if (!dataTicket) return res.status(401).json({ status: 'error', message: 'No se pudo realizar la compra' });
         const ticket = await ticketsService.create(_id, dataTicket);
         res.json({ status: 'success', payload: ticket })
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });

@@ -1,0 +1,119 @@
+[33mcommit be9e12983426008cc2c5e52ea5f019a6204e0684[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Thu Nov 30 03:08:23 2023 -0300
+
+    solución Put
+
+[33mcommit f05939abf58da37e9c7a55ce79b601494900bfe2[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Thu Nov 30 03:01:02 2023 -0300
+
+    Documentación Products
+
+[33mcommit e14a7f53a404e661211a89347366e32f04fca720[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Thu Nov 23 05:12:45 2023 -0300
+
+    setTicket en mongodb
+
+[33mcommit 4ff67177a8f5fbae60aa21cd2ca5cfe6b1a9c745[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Wed Nov 22 06:40:00 2023 -0300
+
+    ticket 0.1
+
+[33mcommit ec5d391e5409b8eb9d31367811c8f0bc808afeb0[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Tue Nov 21 16:24:05 2023 -0300
+
+    protección de rutas
+
+[33mcommit 3355a43c7e52683b63ad548d4134f14f48c6356f[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Tue Nov 21 05:08:22 2023 -0300
+
+    editar y eliminar producto
+
+[33mcommit 3c5e13ed73f30265cdb3794b6df71c1fab7b78e1[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Mon Nov 20 19:09:20 2023 -0300
+
+    addOnlyVerify
+
+[33mcommit 94e09cf0f8b97c702aa71538ad70be49c1c8fb59[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Mon Nov 20 17:53:23 2023 -0300
+
+    verificacion de correo
+
+[33mcommit d10ca6d6380396e48f54c0fef6f6c42c61d74fca[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Thu Nov 16 05:30:23 2023 -0300
+
+    cart protected
+
+[33mcommit 5b7a28048bb393591bb274ef191aac0124c2ee7f[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Thu Nov 16 04:38:31 2023 -0300
+
+    add cart
+
+[33mcommit a313a12211ac1e0229ccebd81198eb0ffb5018aa[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Wed Nov 15 05:47:52 2023 -0300
+
+    middleware
+
+[33mcommit b50160a522cc5239840a77778fece88714f485b0[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Wed Nov 15 03:10:12 2023 -0300
+
+    jwtCookie
+
+[33mcommit a00b083032b46f92de68a28718756cbaf10cece0[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Wed Nov 15 02:03:44 2023 -0300
+
+    soluciónLogin
+
+[33mcommit b282f48b88e3dfbb55481fd642a235205c8fcfcc[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Tue Nov 14 20:28:31 2023 -0300
+
+    jwt
+
+[33mcommit b917006d8c889b393e989b5674f89396fe0e9773[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Tue Nov 14 00:39:35 2023 -0300
+
+    swal
+
+[33mcommit a4fe493ae710036e0335b6b03b4d03b7001b16b5[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Mon Nov 13 05:38:22 2023 -0300
+
+    realtimeproducts
+
+[33mcommit c3b9bd4d8c2eba96f93cc8b4db3eb78ce3f4c1d1[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Sat Nov 11 01:29:12 2023 -0300
+
+    showProducts
+
+[33mcommit 0c3c1458f8d3b41ac34b4cbfbc1355b1d18b5271[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Sat Nov 11 00:00:58 2023 -0300
+
+    chat
+
+[33mcommit fbaab34b0b75710cd0bca9e1849d93a009068d3e[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Fri Nov 10 18:47:58 2023 -0300
+
+    cart&product mongo-fs
+
+[33mcommit 3320a8ad60d7696ae052a2157fd5251364da86a6[m
+Author: Cristian Lanza <cristianlanza@gmail.com>
+Date:   Tue Nov 7 23:16:57 2023 -0300
+
+    Estructura Inicia

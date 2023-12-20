@@ -15,6 +15,7 @@ class ProductsDao {
             const product = await Products.findById(id);
             return product;
         } catch (error) {
+            console.log(error)
             throw error;
         };
     };
@@ -39,8 +40,8 @@ class ProductsDao {
 
     async create(productInfo) {
         try {
-            await Products.create(productInfo);
-            return productInfo;
+            const result = await Products.create(productInfo);
+            return result;
         } catch (error) {
             throw error;
         };

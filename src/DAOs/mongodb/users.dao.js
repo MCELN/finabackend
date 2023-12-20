@@ -48,6 +48,7 @@ class UsersDao {
 
     async create(userInfo) {
         try {
+            console.log('dao create', userInfo)
             const newUser = await Users.create(userInfo);
             return newUser;
         } catch (error) {

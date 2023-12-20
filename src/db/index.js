@@ -15,7 +15,7 @@ class MongoConnection {
             ),
                 console.log('db is connected');
         } catch (error) {
-            console.log(`${error} No se pudo establecer la conexión con la base de datos.`);
+            console.error(`${error} No se pudo establecer la conexión con la base de datos.`);
         };
     };
 

@@ -32,9 +32,9 @@ const getByIdForHandlebars = async (id) => {
     };
 };
 
-const create = async (cartInfo) => {
+const create = async () => {
     try {
-        const newCart = new CartsDto(cartInfo);
+        const newCart = new CartsDto();
         const cart = await Carts.create(newCart);
         return cart;
     } catch (error) {
@@ -53,14 +53,14 @@ const updateOne = async (id, pid, qty) => {
         const totalProd = index >= 0 ? cart.products[index].quantity + qty : qty;
 
         if (index >= 0) {
-            if (product.stock >= qty) {
+            if (product.stock >= totalProd) {
                 await Carts.updateOne(id, pid, totalProd);
                 return `Se ${qty > 1 ? 'han' : 'ha'} agregado ${qty} ${qty > 1 ? 'unidades' : 'unidad'} de ${product.title} a su carrito.`;
             } else {
                 return 'notstock';
             };
         } else {
-            if (product.stock >= qty) {
+            if (product.stock >= totalProd) {
                 const newProduct = {
                     product: pid,
                     quantity: qty,

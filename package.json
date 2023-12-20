@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev-mongo": "NODE_ENV=devmongo nodemon src/index.js",
     "start:dev-fs": "NODE_ENV=devfs nodemon src/index.js",
-    "start:prod": "NODE_ENV=prod node src/index.js"
+    "start:prod": "NODE_ENV=prod node src/index.js",
+    "test": "mocha",
+    "test:watch": "NODE_ENV=devmongo nodemon --watch test --exec 'npm run test'"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +30,12 @@
     "socket.io": "^4.7.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

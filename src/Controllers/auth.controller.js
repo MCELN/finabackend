@@ -107,11 +107,27 @@ router.get('/verify/:email/:verify', async (req, res) => {
     try {
         const { email, verify } = req.params;
 
-        await userService.verifyMail(email, verify);
+        if (!email || !verify) {
+            req.logger.warning('Intento de verificación sin parámetros.');
+            return res.redirect('/products');
+        }
+
+        const response = await userService.verifyMail(email, verify);
+
+        if (response === 'not found') {
+            req.logger.error('Error en la verificación del correo');
+            return res.redirect('/products');
+        } else if (response === 'Cuenta verificada') {
+            req.logger.info('Cuenta verificada');
+            return res.redirect('/products');
+        }
         const user = await userService.getOne({ email });
 
         const { first_name, last_name } = user;
 
+        if (!response) {
+            return res.status(400).json({ status: 'error', error: 'Invalid credentials' });
+        }
         res.render(
             'verify',
             {

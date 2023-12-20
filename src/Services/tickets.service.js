@@ -3,6 +3,7 @@ const TicketsDto = require('../DTOs/ticket.dto');
 const cartsService = require('../Services/carts.service');
 const productsService = require('../Services/products.service');
 const usersService = require('../Services/users.service');
+const { sendTicket } = require('../utils/send-mail.util');
 
 const Tickets = new TicketsDao();
 
@@ -18,6 +19,9 @@ const create = async (uid, ticketInfo) => {
             const ticket = new TicketsDto(newTicket);
 
             const response = await Tickets.create(ticket);
+
+            sendTicket(user, ticketInfo);
+
             return response;
         };
 
@@ -67,6 +71,8 @@ const purchase = async (cid) => {
 
             return purchasedProducts;
         }
+
+        return null;
 
     } catch (error) {
         throw error;

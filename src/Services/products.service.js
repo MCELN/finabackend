@@ -13,7 +13,8 @@ const getAll = async () => {
 
 const getById = async (id) => {
     try {
-        return await Products.getById(id);
+        const product = await Products.getById(id);
+        return product;
     } catch (error) {
         throw error;
     };

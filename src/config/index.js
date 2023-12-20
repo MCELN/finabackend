@@ -9,6 +9,7 @@ module.exports = {
         host: process.env.DB_HOST,
         name: process.env.DB_NAME,
         session: process.env.DB_SESSION,
+        test: process.env.DB_TEST,
     },
     jwtKey: process.env.JWT_PRIVATE_KEY,
     github: {
@@ -20,4 +21,5 @@ module.exports = {
         userMail: process.env.USER_MAIL,
         passMail: process.env.PASSWORD_MAIL,
     },
+    domain: process.env.DOMAIN,
 }

@@ -7,11 +7,13 @@ const passport = require('passport');
 const initializePassport = require('./config/passport.config');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
+const logger = require('./middlewares/logger.middleware');
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(logger);
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
 

@@ -17,8 +17,19 @@ switch (environment) {
             ChatDao: require('../DAOs/mongodb/chat.dao'),
             UsersDao: require('../DAOs/mongodb/users.dao'),
             TicketsDao: require('../DAOs/mongodb/tickets.dao'),
+            winstonLog: require('../utils/winston/dev.winston'),
         };
 
         break;
+
+    case 'prod':
+        module.exports = {
+            ProductsDao: require('../DAOs/mongodb/products.dao'),
+            CartsDao: require('../DAOs/mongodb/carts.dao'),
+            ChatDao: require('../DAOs/mongodb/chat.dao'),
+            UsersDao: require('../DAOs/mongodb/users.dao'),
+            TicketsDao: require('../DAOs/mongodb/tickets.dao'),
+            winstonLog: require('../utils/winston/prod.winston'),
+        };
 };
 

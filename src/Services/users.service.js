@@ -3,8 +3,8 @@ const UsersDto = require('../DTOs/users.dto');
 const cartService = require('./carts.service');
 const { getHashPassword } = require('../utils/bcrypt.util');
 const { v4: uuidv4 } = require('uuid');
-const transport = require('../utils/nodemailer.util');
-const { mailer } = require('../config');
+const { sendVerifyMail } = require('../utils/send-mail.util');
+const { domain } = require('../config');
 
 const Users = new UsersDao();
 
@@ -46,7 +46,14 @@ const getOne = async (prop) => {
 
 const updateOne = async (id, userInfo) => {
     try {
-        return await Users.updateOne(id, userInfo);
+        const currentUser = await Users.getById(id);
+        if (!userInfo.email || userInfo.email === currentUser.email) {
+            return await Users.updateOne(id, userInfo);
+        } else {
+            userInfo.verified = false;
+
+        }
+
     } catch (error) {
         throw error;
     };
@@ -68,6 +75,7 @@ const create = async (userInfo) => {
 
         if (userExists) return 'E-Mail en uso';
 
+        console.log('service create2', userInfo)
         userInfo.cart = await cartService.create();
         userInfo.verify = uuidv4();
         userInfo.verified = false;
@@ -78,23 +86,10 @@ const create = async (userInfo) => {
         const newUser = new UsersDto(userInfo);
         const user = await Users.create(newUser);
 
-        const verifyLink = `http://localhost:3000/auth/verify/${user.email}/${user.verify}`;
+        const verifyLink = `${domain}/auth/verify/${user.email}/${user.verify}`;
 
-        await transport.sendMail({
-            from: mailer.userMail,
-            to: user.email,
-            subject: `Bienvenido a nuestra web, ${user.first_name}!!!`,
-            html: `
-                <div>
-                    <h1>Gracias por elegirnos ${user.first_name}!!</h1>
-                    <p>Para poder comprar nuestros productos es necesario verificar tu correo electrónico.</p>
-                    <p>Sólo debes seguir el enlace en el botón VERIFICAR CORREO</p>
-                    <a href="${verifyLink}" style="text-decoration: none;">
-                        <button type="button" style="background-color: #3498db; color: #ffffff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">VERIFICAR CORREO</button>
-                    </a>
-                </div>
-            `
-        })
+        sendVerifyMail(user, verifyLink);
+
         return user;
     } catch (error) {
         throw error;
@@ -104,9 +99,15 @@ const create = async (userInfo) => {
 const verifyMail = async (email, verify) => {
     try {
         const user = await Users.getOne({ email });
-        if (user && user.verify === verify) {
-            const result = await Users.updateOne(user._id, { verified: true })
-            return result
+        if (user) {
+            if (user.verified) {
+                return 'Cuenta verificada';
+            } else if (user && !user.verified && (user.verify && user.verify === verify)) {
+                user.verified = true;
+                user.verify = null;
+                await Users.updateOne(user._id, user);
+                return 'Su cuenta ha sido verificada!'
+            }
         }
 
         return "not found";
