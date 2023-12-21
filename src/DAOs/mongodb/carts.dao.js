@@ -22,7 +22,8 @@ class CartsDao {
 
     async getByIdForHandlebars(id) {
         try {
-            return await Carts.findById(id).lean();
+            const result = await Carts.findById(id).lean();
+            return result;
         } catch (error) {
             throw error;
         };
@@ -37,8 +38,9 @@ class CartsDao {
         };
     };
 
-    async updateOne(id, pid, qty, newProduct) {
+    async updateOneProduct(id, pid, qty, newProduct) {
         try {
+            await Carts.updateOne({ _id: id }, { $set: { updateCartAt: new Date() } });
             if (!newProduct) {
                 const result = await Carts.updateOne(
                     { _id: id, 'products.product': pid },
@@ -46,6 +48,7 @@ class CartsDao {
                 );
                 return result;
             } else {
+
                 const result = await Carts.updateOne({ _id: id }, { $push: { products: newProduct } })
                 return result;
             }
@@ -53,6 +56,15 @@ class CartsDao {
             throw error;
         };
     };
+
+    async updateOne(id, prop) {
+        try {
+            const result = await Carts.updateOne({ _id: id }, { $set: prop });
+            return result;
+        } catch (error) {
+            throw error;
+        };
+    }
 
     async deleteOneProd(id, pid) {
         try {

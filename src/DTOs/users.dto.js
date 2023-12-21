@@ -11,6 +11,7 @@ class UsersDto {
         this.status = newUser.status || true;
         this.role = newUser.role || 'user';
         this.createdAt = newUser.createdAt || Date.now();
+        this.lastLoginAt = newUser.lastLoginAt || Date.now();
     };
 };
 

@@ -42,7 +42,17 @@ const create = async () => {
     };
 };
 
-const updateOne = async (id, pid, qty) => {
+const updateOne = async (id, cartInfo) => {
+    try {
+        const result = await Carts.updateOne(id, cartInfo);
+        return result;
+    } catch (error) {
+        throw error;
+
+    }
+}
+
+const updateOneProduct = async (id, pid, qty) => {
     try {
         const cart = await Carts.getById(id);
         const product = await productsService.getById(pid);
@@ -54,7 +64,7 @@ const updateOne = async (id, pid, qty) => {
 
         if (index >= 0) {
             if (product.stock >= totalProd) {
-                await Carts.updateOne(id, pid, totalProd);
+                await Carts.updateOneProduct(id, pid, totalProd);
                 return `Se ${qty > 1 ? 'han' : 'ha'} agregado ${qty} ${qty > 1 ? 'unidades' : 'unidad'} de ${product.title} a su carrito.`;
             } else {
                 return 'notstock';
@@ -66,7 +76,7 @@ const updateOne = async (id, pid, qty) => {
                     quantity: qty,
                 };
 
-                await Carts.updateOne(id, pid, qty, newProduct);
+                await Carts.updateOneProduct(id, pid, qty, newProduct);
                 return `Se ${qty > 1 ? 'han' : 'ha'} agregado ${qty} ${qty > 1 ? 'unidades' : 'unidad'} de ${product.title} a su carrito.`;
             } else {
                 return 'notstock';
@@ -147,6 +157,21 @@ const purchase = async (cid, uid) => {
     };
 };
 
+const cartTime = async (id, updateCart) => {
+    try {
+        const maxCartTime = (Date.now() - (1000 * 60 * 15));
+        if (updateCart < maxCartTime) {
+            await Carts.deleteAllProd(id);
+            return true;
+        };
+        const newDate = Date.now();
+        await Carts.updateOne(id, { updateCartAt: newDate });
+        return false;
+    } catch (error) {
+        throw error;
+    };
+}
+
 
 
 module.exports = {
@@ -155,7 +180,9 @@ module.exports = {
     getByIdForHandlebars,
     create,
     updateOne,
+    updateOneProduct,
     deleteOneProd,
     deleteAllProd,
     purchase,
+    cartTime,
 }

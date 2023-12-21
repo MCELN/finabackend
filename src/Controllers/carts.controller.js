@@ -19,6 +19,9 @@ router.get('/', async (req, res) => {
 router.get('/:cid', authToken, protectedRouteCart, async (req, res) => {
     try {
         const { cid } = req.params;
+        const cart = await cartService.getById(cid);
+        const { _id, updateCartAt } = cart;
+        await cartService.cartTime(_id, updateCartAt);
         const cartProducts = await cartService.getByIdForHandlebars(cid);
         const products = cartProducts.products;
         const flag = (products.length > 0);
@@ -34,6 +37,7 @@ router.get('/:cid', authToken, protectedRouteCart, async (req, res) => {
                 style: "home.css",
             });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -51,7 +55,7 @@ router.put('/:cid/products/:pid', authToken, protectedRouteCart, async (req, res
     try {
         const { cid, pid } = req.params;
         const qty = req.body.quantity;
-        const response = await cartService.updateOne(cid, pid, qty);
+        const response = await cartService.updateOneProduct(cid, pid, qty);
 
         if (response === 400) return res.status(400).json({ status: 'error', message: 'Bad request' });
         if (response === 'notstock') return res.json({ status: 'success', message: 'notstock' });

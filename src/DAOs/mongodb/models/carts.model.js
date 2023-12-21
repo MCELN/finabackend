@@ -16,6 +16,10 @@ const cartSchema = new mongoose.Schema({
         }],
         default: [],
     },
+    updateCartAt: {
+        type: Number,
+        default: Date.now(),
+    }
 });
 
 cartSchema.pre(['find', 'findOne'], function () {

@@ -1,16 +1,23 @@
-const { UsersDao } = require('../adapters/factory');
+const { UsersDao, CartsDao } = require('../adapters/factory');
 const UsersDto = require('../DTOs/users.dto');
-const cartService = require('./carts.service');
+const UserMainDataDto = require('../DTOs/users-main-data.dto');
+const formatDate = require('../utils/formattedDate.util');
 const { getHashPassword } = require('../utils/bcrypt.util');
 const { v4: uuidv4 } = require('uuid');
 const { sendVerifyMail } = require('../utils/send-mail.util');
 const { domain } = require('../config');
 
 const Users = new UsersDao();
+const Carts = new CartsDao();
 
 const getAll = async () => {
     try {
-        const users = await Users.getAll();
+        const allUsers = await Users.getAll();
+        const serializedMessages = allUsers.map(user => user.serialize())
+        const users = serializedMessages.map(user => {
+            const userData = new UserMainDataDto(user);
+            return userData;
+        });
         return users;
     } catch (error) {
         throw error;
@@ -76,7 +83,7 @@ const create = async (userInfo) => {
         if (userExists) return 'E-Mail en uso';
 
         console.log('service create2', userInfo)
-        userInfo.cart = await cartService.create();
+        userInfo.cart = await Carts.create();
         userInfo.verify = uuidv4();
         userInfo.verified = false;
 
@@ -117,6 +124,18 @@ const verifyMail = async (email, verify) => {
     };
 };
 
+const deleteManyTwoDaysAgo = async (users) => {
+    try {
+        if (!users) return;
+        const twoDaysAgo = new Date(Date.now() - (2 * 24 * 60 * 60 * 1000));
+        const result = await Users.deleteMany({ lastLoginAt: { $lt: twoDaysAgo } });
+
+        return result;
+    } catch (error) {
+        throw error;
+    };
+}
+
 module.exports = {
     getAll,
     getById,
@@ -125,4 +144,5 @@ module.exports = {
     updateOne,
     create,
     verifyMail,
+    deleteManyTwoDaysAgo,
 }

@@ -1,6 +1,7 @@
 class CartsDto {
     constructor() {
         this.products = [];
+        this.updateCartAt = Date.now();
     }
 }
 

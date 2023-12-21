@@ -1,0 +1,25 @@
+<h1>Usuarios</h1>
+
+<div class="usersContainer">
+    No anda...
+    {{#each users}}
+    <div class="usersData" userId="{{this._id}}">
+        <h2>{{this.first_name}} {{this.last_name}}</h2>
+        <p>E-Mail: {{this.email}}</p>
+        <p>Rol: {{this.role}}</p>
+    </div>
+    {{/each}}
+</div>
+
+{{!-- Añade este bloque para mostrar errores --}}
+{{#if errorMessage}}
+<p>Error: {{errorMessage}}</p>
+{{/if}}
+
+{{#each users}}
+<div class="usersData" userId="{{this._id}}">
+    <h2>{{this.first_name}} {{this.last_name}}</h2>
+    <p>E-Mail: {{this.email}}</p>
+    <p>Rol: {{this.role}}</p>
+</div>
+{{/each}}

@@ -55,6 +55,15 @@ class UsersDao {
             throw error;
         };
     };
+
+    async deleteMany(prop) {
+        try {
+            const result = await Users.deleteMany(prop);
+            return result;
+        } catch (error) {
+            throw error;
+        };
+    }
 };
 
 module.exports = UsersDao;
