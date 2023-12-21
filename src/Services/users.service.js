@@ -82,7 +82,6 @@ const create = async (userInfo) => {
 
         if (userExists) return 'E-Mail en uso';
 
-        console.log('service create2', userInfo)
         userInfo.cart = await Carts.create();
         userInfo.verify = uuidv4();
         userInfo.verified = false;

@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     verify: String,
     verified: Boolean,
     createdAt: {
-        type: Date,
+        type: Number,
         default: Date.now(),
     },
 });
