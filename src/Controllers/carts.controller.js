@@ -55,13 +55,16 @@ router.put('/:cid/products/:pid', authToken, protectedRouteCart, async (req, res
     try {
         const { cid, pid } = req.params;
         const qty = req.body.quantity;
+        const timeUpdate = Date.now();
+        await cartService.cartTime(cid, timeUpdate);
         const response = await cartService.updateOneProduct(cid, pid, qty);
 
         if (response === 400) return res.status(400).json({ status: 'error', message: 'Bad request' });
-        if (response === 'notstock') return res.json({ status: 'success', message: 'notstock' });
+        if (response === 'notstock') return res.status(404).json({ status: 'success', payload: 'Lo sentimos. No se encuentra en stock' });
 
         res.status(201).json({ status: 'succes', payload: response });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });

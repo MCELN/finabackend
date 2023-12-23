@@ -4,6 +4,7 @@ const chatController = require('../Controllers/chat.controller');
 const rtpController = require('../Controllers/realtimeproducts.controller');
 const authController = require('../Controllers/auth.controller');
 const usersController = require('../Controllers/users.controller');
+const currentController = require('../Controllers/current.controller');
 
 const router = app => {
     app.use('/api/products', productsController);
@@ -13,6 +14,7 @@ const router = app => {
     app.use('/chat', chatController);
     app.use('/realtimeproducts', rtpController);
     app.use('/auth', authController);
+    app.use('/current', currentController);
     app.use('/*', (req, res) => {
         try {
             res.redirect('/products');

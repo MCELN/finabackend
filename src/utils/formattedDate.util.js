@@ -1,7 +1,8 @@
 const formatDate = (date) => {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
+    const dateFormat = new Date(date);
+    const day = dateFormat.getDate();
+    const month = dateFormat.getMonth() + 1;
+    const year = dateFormat.getFullYear();
 
     const formattedDay = day < 10 ? `0${day}` : day;
     const formattedMonth = month < 10 ? `0${month}` : month;

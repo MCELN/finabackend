@@ -33,7 +33,9 @@ userSchema.methods.serialize = function () {
         cart: this.cart,
         status: this.status,
         role: this.role,
-        createdAt: this.date,
+        verify: this.verify,
+        verified: this.verified,
+        createdAt: this.createdAt,
     };
 };
 

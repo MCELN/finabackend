@@ -67,13 +67,7 @@ addToCartButtons.forEach(function (button) {
                 }
             })
             .catch(function (error) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'error',
-                    title: `${error}`,
-                    showConfirmButton: false,
-                    timer: 2000,
-                });
+                console.log(error)
             });
 
     });
