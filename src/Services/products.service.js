@@ -1,5 +1,6 @@
 const { ProductsDao } = require('../adapters/factory');
 const ProductsDto = require('../DTOs/products.dto');
+const usersService = require('../Services/users.service');
 
 const Products = new ProductsDao();
 
@@ -27,6 +28,14 @@ const getOne = async ({ prop }) => {
         throw error;
     };
 };
+
+const getMany = async (prop) => {
+    try {
+        return await Products.getMany(prop);
+    } catch (error) {
+        throw error;
+    };
+}
 
 const paginate = async (filter, queryOption) => {
     try {
@@ -118,6 +127,7 @@ module.exports = {
     getAll,
     getById,
     getOne,
+    getMany,
     paginate,
     paginateFs,
     create,

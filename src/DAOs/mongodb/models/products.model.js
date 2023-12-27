@@ -15,6 +15,10 @@ const productSchema = mongoose.Schema({
     status: Boolean,
     category: String,
     stock: Number,
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user',
+    }
 });
 
 productSchema.methods.serialize = function () {
@@ -28,10 +32,15 @@ productSchema.methods.serialize = function () {
         status: this.status,
         category: this.category,
         stock: this.stock,
+        createdBy: this.createdBy,
     };
 };
 
 productSchema.plugin(mongoosePaginate);
+
+productSchema.pre(['find', 'findOne'], function () {
+    this.populate({ path: 'createdBy', select: 'first_name last_name email' });
+});
 
 const Products = mongoose.model(productCollection, productSchema);
 

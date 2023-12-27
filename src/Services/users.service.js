@@ -133,6 +133,25 @@ const deleteManyTwoDaysAgo = async (users) => {
     } catch (error) {
         throw error;
     };
+};
+
+const usersProducts = async (id) => {
+    try {
+        const userProducts = await Users.getById(id);
+        const user = {};
+        if (userProducts) {
+            const cart = await Carts.getById(userProducts.cart)
+            user.userAdmin = userProducts && userProducts.role === 'admin';
+            user.userPremium = userProducts && userProducts.role === 'premium';
+            user.userUser = userProducts && userProducts.role === 'user';
+            user.cid = cart && cart._id;
+            user.verified = userProducts.verified;
+            user.user = userProducts;
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    };
 }
 
 module.exports = {
@@ -144,4 +163,5 @@ module.exports = {
     create,
     verifyMail,
     deleteManyTwoDaysAgo,
+    usersProducts,
 }

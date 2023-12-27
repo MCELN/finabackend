@@ -1,37 +1,46 @@
 <h1>Products</h1>
 
-{{#if flag}}
-<h2>Bienvenido!</h2>
-<ul>
-    <li>
-        {{user.first_name}} {{user.last_name}}
-    </li>
-    <li>
-        E-Mail: {{user.email}}
-    </li>
-    <li>
-        Rol: {{user.role}}
-    </li>
-</ul>
-{{else}}
-<p></p>
-{{/if}}
+<div class="buttonsProfile">
 
-{{#if userAdmin}}
-<form action="/realtimeproducts">
-    <button type="submit">Administrar productos</button>
-</form>
-<br>
-{{/if}}
+    {{#if userAdmin}}
+    <form action="/realtimeproducts">
+        <button type="submit">Administrar productos</button>
+    </form>
+    <br>
+    {{/if}}
 
-<form action="/login" id="logout">
-    <button type="submit">Cerrar Sesión</button>
-</form>
+    {{#if userPremium}}
+    <form action="/realtimeproducts">
+        <button type="submit">Administrar productos</button>
+    </form>
+    <br>
+    {{/if}}
 
+    {{#if user}}
+    <form action="/current/profile">
+        <button type="submit">Perfil</button>
+    </form>
+    {{/if}}
+
+    {{#if user}}
+    <form action="/login" id="logout">
+        <button type="submit">Cerrar Sesión</button>
+    </form>
+    {{/if}}
+
+    {{#unless user}}
+    <form action="/auth/login">
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+    {{/unless}}
+</div>
+
+{{#if cid}}
 <a href="/api/carts/{{cid}}" class="carritoInProduct">Carrito</a>
+{{/if}}
 
 <div class="container">
-    {{#each serializedMessages}}
+    {{#each serializedProducts}}
     <div class="card">
         <h3>{{this.title}}</h3>
         <img src="{{this.thumbnail}}" onerror="this.src='/asset/no-image.jpg'" alt="Product">
@@ -44,6 +53,9 @@
         {{#if ../verified}}
         <button class="addToCart" productId="{{this._id}}" cartId="{{../cid}}">Agregar al Carrito</button>
         {{else}}
+        {{/if}}
+        {{#if this.createdBy}}
+        <p>Publicado por: {{this.createdBy}}</p>
         {{/if}}
     </div>
     {{/each}}

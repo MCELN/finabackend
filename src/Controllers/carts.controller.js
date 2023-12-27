@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
         const carts = await cartService.getAll();
         res.json({ status: 'success', payload: carts });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -47,6 +48,7 @@ router.post('/', async (req, res) => {
         const response = await cartService.create();
         res.status(201).json({ status: 'success', payload: response });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -90,6 +92,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
         if (response === 401) return res.status(401).json({ status: 'error', payload: 'Bad Request' });
         res.json({ status: 'success', payload: response })
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -100,6 +103,7 @@ router.delete('/:cid/products', async (req, res) => {
         const response = await cartService.deleteAllProd(cid);
         res.status(201).json({ status: 'success', payload: response });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });

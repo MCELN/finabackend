@@ -16,6 +16,7 @@ router.get('/login', protectedRouteLogin, (req, res) => {
             }
         );
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     }
 });
@@ -44,6 +45,7 @@ router.post('/login', async (req, res) => {
             .cookie('authToken', token, { maxAge: 3600000, httpOnly: true })
             .json({ status: 'success', payload: req.user, token });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -57,6 +59,7 @@ router.get('/register', protectedRouteLogin, async (req, res) => {
             }
         );
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     }
 })
@@ -72,6 +75,7 @@ router.post('/register',
 
             res.status(201).json({ status: 'success', payload: user });
         } catch (error) {
+            req.logger.error(error);
             res.status(500).json({ status: 'error', error: 'Internal error' });
         };
     },
@@ -98,6 +102,7 @@ router.get('/githubcallback',
                 res.status(401).json({ status: 'error', payload: 'No se pudo iniciar sesión desde github' })
             };
         } catch (error) {
+            req.logger.error(error);
             res.status(500).json({ status: 'error', error: 'Internal error' });
         };
     },
@@ -126,6 +131,7 @@ router.get('/verify/:email/:verify', async (req, res) => {
         const { first_name, last_name } = user;
 
         if (!response) {
+            req.logger.warning('Intento de verificación de correo no verificado');
             return res.status(400).json({ status: 'error', error: 'Invalid credentials' });
         }
         res.render(
@@ -138,6 +144,7 @@ router.get('/verify/:email/:verify', async (req, res) => {
             },
         );
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     }
 })
@@ -148,6 +155,7 @@ router.delete('/logout', async (req, res) => {
         req.user = null;
         res.status(200).json({ status: 'success', message: 'Logout successful' });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });

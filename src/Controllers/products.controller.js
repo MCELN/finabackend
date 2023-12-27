@@ -9,12 +9,10 @@ const router = Router();
 
 router.get('/', authToken, async (req, res) => {
     try {
-        const user = await userService.getByIdForHandlebars(req.user._id);
-        const cart = await cartService.getById(user.cart)
-        const userAdmin = user && user.role === 'admin';
-        const userUser = user && user.role === 'user';
-        const cid = cart && cart._id;
-        const verified = user.verified;
+
+        const userResponse = await userService.usersProducts(req.user._id);
+
+        const { userAdmin, userPremium, userUser, cid, verified, user } = userResponse;
 
         const { limit = 10, page = 1, sort, query } = req.query;
 
@@ -42,14 +40,11 @@ router.get('/', authToken, async (req, res) => {
             sort: sortO,
         };
 
-        const products = await productsService.paginate(filter, queryOption);
+        const responseProducts = await productsService.paginate(filter, queryOption);
 
-        const prod = products.docs;
+        const serializedProducts = responseProducts.docs.map(product => product.serialize());
 
-        const serializedMessages = prod.map(product => product.serialize());
-
-
-        const { prevPage, nextPage, hasPrevPage, hasNextPage } = products;
+        const { prevPage, nextPage, hasPrevPage, hasNextPage } = responseProducts;
 
 
         const prevLink = hasPrevPage ? `/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
@@ -59,13 +54,14 @@ router.get('/', authToken, async (req, res) => {
         res.render(
             'products',
             {
-                serializedMessages,
+                serializedProducts,
                 verified,
                 cid,
                 prevLink,
                 nextLink,
                 user,
                 userAdmin,
+                userPremium,
                 userUser,
                 style: 'home.css',
             },
@@ -113,6 +109,7 @@ router.post('/', async (req, res) => {
             res.status(201).json({ status: 'success', payload: newProduct });
         };
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -125,6 +122,7 @@ router.put('/:pid', async (req, res) => {
         const productUp = await productsService.updateOne(pid, req.body);
         res.status(201).json({ status: 'success', payload: productUp });
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });
@@ -139,6 +137,7 @@ router.delete('/:pid', async (req, res) => {
             res.status(204).json({ status: 'error', message: 'El producto que desea eliminar no existe.' });
         }
     } catch (error) {
+        req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
 });

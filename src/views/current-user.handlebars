@@ -2,6 +2,11 @@
 
 <div>
     <h2>{{user.first_name}} {{user.last_name}}</h2>
+    {{#unless showButton}}
+    <form action="/current/create">
+        <button type="submit">Mis productos</button>
+    </form>
+    {{/unless}}
     <p>E-Mail: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
     <p>Rol: {{user.role}}</p>
@@ -13,7 +18,9 @@
 <p>Con una cuenta premium podrás publicar tus productos!</p>
 {{/if}}
 
-<a href="http://localhost:3000/products">Volver</a>
+<form action="/products">
+    <button type="submit">Volver</button>
+</form>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/profile.js"></script>

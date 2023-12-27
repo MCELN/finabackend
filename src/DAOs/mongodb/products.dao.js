@@ -29,6 +29,15 @@ class ProductsDao {
         };
     };
 
+    async getMany(prop) {
+        try {
+            const products = await Products.find(prop);
+            return products;
+        } catch (error) {
+            throw error;
+        };
+    }
+
     async paginate(filter, queryOption) {
         try {
             const result = await Products.paginate(filter, queryOption);

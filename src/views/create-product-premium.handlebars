@@ -1,0 +1,71 @@
+<h1>Real time Products</h1>
+
+<h2>Products</h2>
+
+<div class="buttonsProfile">
+    <form action="/products">
+        <button type="submit">Productos</button>
+    </form>
+
+    <form action="/current/profile">
+        <button type="submit">Perfil</button>
+    </form>
+
+    <form action="/login" id="logout">
+        <button type="submit">Cerrar Sesión</button>
+    </form>
+</div>
+
+<div class="container">
+    {{#each serializedProducts}}
+    <a href="/realtimeproducts/{{this._id}}">
+        <div class="card">
+            <h3>{{this.title}}</h3>
+            <img src="{{this.thumbnail}}" onerror="this.src='/assets/no-image.jpg'" alt="Img Product">
+            <p>{{this.description}}</p>
+            {{#if this.price}}
+            <span>Price: ${{this.price}}</span>
+            {{else}}
+            <span>Free</span>
+            {{/if}}
+            <br>
+            <span>Stock: {{this.stock}}</span>
+        </div>
+    </a>
+    {{/each}}
+</div>
+
+<form id="addProduct">
+
+    <label for="title">Título</label>
+    <input type="text" name="title">
+
+    <label for="description">Descripción</label>
+    <input type="text" name="description">
+
+    <label for="thumbnail">URL Imagen</label>
+    <input type="text" name="thumbnail">
+
+    <label for="code">Código</label>
+    <input type="text" name="code">
+
+    <label for="category">Categoría</label>
+    <input type="text" name="category">
+
+    <label for="price">Precio</label>
+    <input type="number" name="price">
+
+    <label for="stock">Stock</label>
+    <input type="number" name="stock">
+
+    <div class="checkbox">
+        <label for="status">Estatus: </label>
+        <input type="checkbox" name="status" checked>
+    </div>
+
+    <button type="submit">Agregar Producto</button>
+</form>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtimeproducts.js"></script>

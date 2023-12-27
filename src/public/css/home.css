@@ -11,7 +11,7 @@ h1 {
 h2 {
     text-align: center;
     font-size: 60px;
-    margin-bottom: 20px;
+    margin-bottom: 7px;
 }
 
 .container {
@@ -78,7 +78,8 @@ form label {
 form button {
     background-color: rgb(121, 206, 121);
     margin: auto;
-    margin-top: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     width: 100px;
 }
 
@@ -142,6 +143,12 @@ form button {
 .button {
     background-color: rgb(121, 206, 121);
     margin: auto;
-    margin-top: 40px;
+    margin-top: 20px;
     width: 100px;
+}
+
+.buttonsProfile {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 3em;
 }

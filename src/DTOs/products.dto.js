@@ -8,6 +8,7 @@ class ProductsDto {
         this.status = productInfo.status;
         this.category = productInfo.category;
         this.stock = productInfo.stock;
+        this.createdBy = productInfo.createdBy || null;
     };
 };
 
