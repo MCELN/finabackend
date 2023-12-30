@@ -67,7 +67,7 @@ form {
     flex-direction: column;
     width: 500px;
     margin: 0 auto;
-    margin-top: 70px;
+    margin-top: 20px;
 }
 
 form label {
@@ -150,5 +150,5 @@ form button {
 .buttonsProfile {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 3em;
+    margin-bottom: 10px;
 }

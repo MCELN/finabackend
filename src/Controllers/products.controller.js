@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const productsService = require('../Services/products.service');
-const cartService = require('../Services/carts.service');
 const userService = require('../Services/users.service');
 const { isValidObjectId } = require('mongoose');
 const { authToken } = require('../utils/jwt.util');
@@ -47,8 +46,8 @@ router.get('/', authToken, async (req, res) => {
         const { prevPage, nextPage, hasPrevPage, hasNextPage } = responseProducts;
 
 
-        const prevLink = hasPrevPage ? `/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
-        const nextLink = hasNextPage ? `/products?limit=${limit}&page=${nextPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
+        const prevLink = hasPrevPage ? `/api/products?limit=${limit}&page=${prevPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
+        const nextLink = hasNextPage ? `/api/products?limit=${limit}&page=${nextPage}${sort ? "&sort=" + sort : ""}${query ? "&query=" + query : ""}` : null;
 
 
         res.render(

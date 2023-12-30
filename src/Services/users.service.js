@@ -137,7 +137,8 @@ const deleteManyTwoDaysAgo = async (users) => {
 
 const usersProducts = async (id) => {
     try {
-        const userProducts = await Users.getById(id);
+        const userCurrent = await Users.getById(id);
+        const userProducts = await userCurrent.serialize();
         const user = {};
         if (userProducts) {
             const cart = await Carts.getById(userProducts.cart)

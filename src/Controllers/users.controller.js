@@ -9,7 +9,6 @@ router.get('/', async (req, res) => {
     try {
 
         const users = await usersService.getAll();
-        console.log(users);
         res.render('users', users);
     } catch (error) {
         req.logger.error(error);

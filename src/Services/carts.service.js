@@ -148,8 +148,6 @@ const purchase = async (cid, uid) => {
 
                 await Carts.deleteOneProd(cid, prod.product._id.toString());
             });
-
-            console.log(subtotal);
         }
 
     } catch (error) {

@@ -1,5 +1,6 @@
 const logout = document.getElementById('logout');
 const addToCartButtons = document.querySelectorAll('.addToCart');
+const verifyEmail = document.getElementById('verifyEmail');
 
 logout.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -72,3 +73,38 @@ addToCartButtons.forEach(function (button) {
 
     });
 });
+
+verifyEmail.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const userId = verifyEmail.getAttribute('userId');
+
+    await fetch(`/auth/verify/${userId}/resend`, {
+        method: 'PUT',
+    })
+        .then((response) => {
+            if (response.ok) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Revisa tu correo y sigue el link de verificación',
+                    showConfirmButton: false,
+                    timer: 3000,
+                })
+                    .then(() => {
+                        window.location.reload();
+                    });
+            } else {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: 'Hubo un problema al intentar la verificación. Intenta nuevamente más tarde.',
+                    showConfirmButton: false,
+                    timer: 3000,
+                });
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+
+})

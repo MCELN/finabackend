@@ -5,7 +5,7 @@ const protectedRouteCart = async (req, res, next) => {
     if (user && user.cart && user.cart === req.params.cid) {
         next();
     } else {
-        return res.status(403).redirect('/products');
+        return res.status(403).redirect('/api/products');
     };
 };
 

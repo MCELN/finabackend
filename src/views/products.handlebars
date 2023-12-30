@@ -1,19 +1,25 @@
 <h1>Products</h1>
 
+{{#unless verified}}
+<div class="buttonsProfile">
+    <p>Para agregar productos al carrito, primero debes verificar tu E-Mail <br> Si no recibiste el E-Mail intenta
+        nuevamente.</p>
+
+    <button type="submit" id="verifyEmail" userId="{{user._id}}">Reenviar E-Mail</button>
+</div>
+{{/unless}}
 <div class="buttonsProfile">
 
     {{#if userAdmin}}
     <form action="/realtimeproducts">
         <button type="submit">Administrar productos</button>
     </form>
-    <br>
     {{/if}}
 
     {{#if userPremium}}
-    <form action="/realtimeproducts">
-        <button type="submit">Administrar productos</button>
+    <form action="/current/create">
+        <button type="submit">Mis productos</button>
     </form>
-    <br>
     {{/if}}
 
     {{#if user}}

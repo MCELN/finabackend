@@ -1,8 +1,11 @@
 const { Router } = require('express');
+const { domain } = require('../config');
+const { v4: uuidv4 } = require('uuid');
 const userService = require('../Services/users.service');
 const { comparePassword } = require('../utils/bcrypt.util');
-const { generateToken } = require('../utils/jwt.util');
+const { generateToken, authToken } = require('../utils/jwt.util');
 const passport = require('passport');
+const { sendVerifyMail } = require('../utils/send-mail.util');
 const protectedRouteLogin = require('../middlewares/protected-route-login');
 
 const router = Router();
@@ -108,23 +111,42 @@ router.get('/githubcallback',
     },
 );
 
+router.put('/verify/:uid/resend', authToken, async (req, res) => {
+    try {
+        const { uid } = req.params;
+        const generateNewVerify = uuidv4();
+        await userService.updateOne({ _id: uid }, { verify: generateNewVerify });
+        const user = await userService.getById(uid);
+
+        const verifyLink = `${domain}/auth/verify/${user.email}/${user.verify}`;
+
+        sendVerifyMail(user, verifyLink);
+
+        res.status(201).json({ status: 'success', message: 'Verificación reenviada' });
+
+    } catch (error) {
+        req.logger.error(error);
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    };
+});
+
 router.get('/verify/:email/:verify', async (req, res) => {
     try {
         const { email, verify } = req.params;
 
         if (!email || !verify) {
             req.logger.warning('Intento de verificación sin parámetros.');
-            return res.redirect('/products');
+            return res.redirect('/api/products');
         }
 
         const response = await userService.verifyMail(email, verify);
 
         if (response === 'not found') {
             req.logger.error('Error en la verificación del correo');
-            return res.redirect('/products');
+            return res.redirect('/api/products');
         } else if (response === 'Cuenta verificada') {
             req.logger.info('Cuenta verificada');
-            return res.redirect('/products');
+            return res.redirect('/api/products');
         }
         const user = await userService.getOne({ email });
 

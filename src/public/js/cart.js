@@ -42,7 +42,6 @@ payProducts.addEventListener('click', async (e) => {
     })
         .then(async response => {
             const resp = await response.json();
-            console.log(resp)
             return resp;
         })
         .then((data) => {

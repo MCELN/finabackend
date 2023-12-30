@@ -29,7 +29,7 @@ loginForm.addEventListener('submit', async (e) => {
                 timer: 2000
             })
                 .then(() => {
-                    window.location.href = '/products';
+                    window.location.href = '/api/products';
                 });
         } else {
             Swal.fire({

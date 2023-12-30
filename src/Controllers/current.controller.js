@@ -5,6 +5,7 @@ const usersService = require('../Services/users.service');
 const productsService = require('../Services/products.service');
 const formatDate = require('../utils/formattedDate.util');
 const { sendPremiumUp } = require('../utils/send-mail.util');
+const protectedRoutePremium = require('../middlewares/protected-route-premium');
 
 const router = Router();
 
@@ -28,7 +29,7 @@ router.get('/profile', authToken, async (req, res) => {
     };
 });
 
-router.get('/create', authToken, async (req, res) => {
+router.get('/create', authToken, protectedRoutePremium, async (req, res) => {
     try {
         const id = req.user._id;
         const filter = {
@@ -66,7 +67,6 @@ router.put('/:uid/premium', authToken, async (req, res) => {
         const { uid } = req.params;
         await usersService.updateOne(uid, { role: 'premium' });
         const user = await usersService.getById(req.params.uid);
-        console.log(user);
         sendPremiumUp(user);
         res.status(200).json({ status: 'success', payload: user });
     } catch (error) {

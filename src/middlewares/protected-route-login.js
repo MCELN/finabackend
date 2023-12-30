@@ -3,7 +3,7 @@ const protectedRouteLogin = async (req, res, next) => {
     if (!token) {
         next();
     } else {
-        return res.status(403).redirect('/products');
+        return res.status(403).redirect('/api/products');
     };
 };
 
