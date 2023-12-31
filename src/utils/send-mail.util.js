@@ -62,8 +62,26 @@ const sendPremiumUp = async (user) => {
     });
 }
 
+const sendDeleteProductPremium = async (user, product) => {
+    const emailBody = `
+        <div>
+            <h1>Hola ${user.first_name}!!</h1>
+            <p>Su producto ${product.title} ha sido eliminado.</p>
+            <p>Ante cualquier duda, comuniquese con el administrador.</p>
+        </div>
+    `;
+
+    await transport.sendMail({
+        from: mailer.userMail,
+        to: user.email,
+        subject: 'Producto eliminado',
+        html: emailBody
+    });
+}
+
 module.exports = {
     sendVerifyMail,
     sendTicket,
     sendPremiumUp,
+    sendDeleteProductPremium,
 };

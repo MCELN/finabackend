@@ -3,6 +3,9 @@ const productsService = require('../Services/products.service');
 const userService = require('../Services/users.service');
 const { isValidObjectId } = require('mongoose');
 const { authToken } = require('../utils/jwt.util');
+const protectedRoutePremium = require('../middlewares/protected-route-premium');
+const protectedRouteAdmin = require('../middlewares/protected-route');
+const { sendDeleteProductPremium } = require('../utils/send-mail.util');
 
 const router = Router();
 
@@ -72,7 +75,7 @@ router.get('/', authToken, async (req, res) => {
     };
 });
 
-router.get('/:pid', async (req, res) => {
+router.get('/:pid', authToken, async (req, res) => {
     try {
         const { pid } = req.params;
 
@@ -96,10 +99,12 @@ router.get('/:pid', async (req, res) => {
     };
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authToken, protectedRoutePremium, async (req, res) => {
     try {
         const productInfo = req.body;
-        const newProduct = await productsService.create(productInfo);
+        const userId = req.user._id;
+
+        const newProduct = await productsService.create(userId, productInfo);
         if (newProduct === 'code') {
             res.status(401).json({ status: 'error', message: 'El código del producto ya existe.' });
         } else if (newProduct === 'campos') {
@@ -113,7 +118,7 @@ router.post('/', async (req, res) => {
     };
 });
 
-router.put('/:pid', async (req, res) => {
+router.put('/:pid', authToken, async (req, res) => {
     try {
         const { pid } = req.params;
         if (req.body.stock) req.body.stock = parseInt(req.body.stock);
@@ -126,10 +131,15 @@ router.put('/:pid', async (req, res) => {
     };
 });
 
-router.delete('/:pid', async (req, res) => {
+router.delete('/:pid', authToken, protectedRouteAdmin, async (req, res) => {
     try {
         const { pid } = req.params;
+        const product = await productsService.getById(pid);
         const response = await productsService.deleteOne(pid);
+        if (product.createdBy._id) {
+            const user = await userService.getById(product.createdBy._id);
+            sendDeleteProductPremium(user, product);
+        };
         if (response === 200) {
             res.json({ status: 'success' });
         } else {

@@ -47,20 +47,7 @@ router.get('/create', authToken, protectedRoutePremium, async (req, res) => {
         req.logger.error(error);
         res.status(500).json({ status: 'error', error: 'Internal error' });
     };
-})
-
-router.post('/create/product', authToken, async (req, res) => {
-    try {
-        const productInfo = req.body;
-        const userInfo = req.user;
-        productInfo.createdBy = userInfo._id;
-        const response = await productsService.create(productInfo);
-        res.status(201).json({ status: 'success', payload: response });
-    } catch (error) {
-        req.logger.error(error);
-        res.status(500).json({ status: 'error', error: 'Internal error' });
-    };
-})
+});
 
 router.put('/:uid/premium', authToken, async (req, res) => {
     try {

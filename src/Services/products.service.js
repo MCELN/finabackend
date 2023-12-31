@@ -53,8 +53,9 @@ const paginateFs = async (limit) => {
     };
 };
 
-const create = async (productInfo) => {
+const create = async (userId, productInfo) => {
     try {
+        const user = await usersService.getById(userId);
         const {
             title,
             description,
@@ -72,6 +73,10 @@ const create = async (productInfo) => {
             || !category
             || !stock
         ) return 'campos';
+
+        if (user && user.role === 'premium') {
+            productInfo.createdBy = userId;
+        }
 
         productInfo.status = status === 'on' ? true : false;
         const newProduct = new ProductsDto(productInfo);
