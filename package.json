@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev-mongo": "NODE_ENV=devmongo nodemon src/index.js",
     "start:dev-fs": "NODE_ENV=devfs nodemon src/index.js",
-    "start": "NODE_ENV=prod node src/index.js",
+    "start": "node src/index.js",
     "test": "mocha",
     "test:watch": "NODE_ENV=devmongo nodemon --watch test --exec 'npm run test'"
   },
