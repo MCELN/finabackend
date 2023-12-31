@@ -15,11 +15,13 @@ router.get('/profile', authToken, async (req, res) => {
         const user = response.serialize();
         user.createdAt = formatDate(user.createdAt);
         const showButton = user.role != 'admin' && user.role != 'premium';
+        const verified = user.verified && user.verified;
 
         res.render('current-user',
             {
                 user,
                 showButton,
+                verified,
                 style: 'home.css',
             },
         );
