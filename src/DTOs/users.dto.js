@@ -12,6 +12,8 @@ class UsersDto {
         this.role = newUser.role || 'user';
         this.createdAt = newUser.createdAt || Date.now();
         this.lastLoginAt = newUser.lastLoginAt || Date.now();
+        this.recoverPassLink = newUser.recoverPassLink || null;
+        this.recoverTime = newUser.recoverTime || null;
     };
 };
 

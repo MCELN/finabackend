@@ -1,10 +1,9 @@
 const { UsersDao, CartsDao } = require('../adapters/factory');
 const UsersDto = require('../DTOs/users.dto');
 const UserMainDataDto = require('../DTOs/users-main-data.dto');
-const formatDate = require('../utils/formattedDate.util');
 const { getHashPassword } = require('../utils/bcrypt.util');
 const { v4: uuidv4 } = require('uuid');
-const { sendVerifyMail } = require('../utils/send-mail.util');
+const { sendVerifyMail, sendRecoverPassword } = require('../utils/send-mail.util');
 const { domain } = require('../config');
 
 const Users = new UsersDao();
@@ -155,6 +154,62 @@ const usersProducts = async (id) => {
     };
 }
 
+const recoverPasswordLink = async (userInfo) => {
+    try {
+        const _id = userInfo && userInfo._id;
+        const generateNewLink = uuidv4();
+        const recoverTime = Date.now();
+
+        const response = await Users.updateOne(_id, { recoverPassLink: generateNewLink, recoverTime: recoverTime });
+
+        if (!response) {
+            return null;
+        }
+
+        const recoverLink = `${domain}/auth/recover-password/${_id}/${generateNewLink}`;
+
+        sendRecoverPassword(userInfo, recoverLink);
+
+        return;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const isValidateLink = async (id, recoverLink) => {
+    try {
+        const user = await Users.getById(id);
+        const isValidLink = user.recoverPassLink === recoverLink && user.recoverPassLink;
+        const isValidTime = user.recoverTime && (Date.now() - user.recoverTime < 1000 * 60 * 5);
+
+        if (user.recoverTime && !isValidTime) {
+            await Users.updateOne(id, { recoverPassLink: null, recoverTime: null });
+        }
+
+        if (!isValidLink || !isValidTime) {
+            return false;
+        }
+
+        return true;
+
+    } catch (error) {
+        throw error;
+    }
+}
+
+const changePassword = async (id, password, rePassword) => {
+    try {
+        if (password !== rePassword) {
+            return 'errorConfirmation';
+        }
+        const hashedPassword = getHashPassword(password);
+        await Users.updateOne(id, { password: hashedPassword, recoverPassLink: null, recoverTime: null });
+        return 'ok';
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getAll,
     getById,
@@ -165,4 +220,7 @@ module.exports = {
     verifyMail,
     deleteManyTwoDaysAgo,
     usersProducts,
+    recoverPasswordLink,
+    isValidateLink,
+    changePassword,
 }

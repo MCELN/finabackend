@@ -1,4 +1,5 @@
 const loginForm = document.getElementById('loginForm');
+const forgotPassword = document.getElementById('forgotPassword');
 
 loginForm.addEventListener('submit', async (e) => {
     try {
@@ -49,4 +50,58 @@ loginForm.addEventListener('submit', async (e) => {
     } catch (error) {
         console.log('Error en la solicitud: ' + error);
     }
+})
+
+
+forgotPassword.addEventListener('click', async (e) => {
+
+    const swal = await Swal.fire({
+        title: 'E-Mail',
+        input: 'text',
+        text: 'Ingrese su correo para restablecer su contraseña',
+    });
+    const userEmail = swal.value;
+
+    try {
+        const response = await fetch('/auth/recover-password', {
+            headers: {
+                'Content-type': 'application/json',
+            },
+            method: 'PUT',
+            body: JSON.stringify({ email: userEmail }),
+        });
+
+        const recoverPassword = await response.json();
+
+        if (recoverPassword.message === 'ok') {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: `Revisa tu correo electrónico para restablecer tu contraseña!`,
+                showConfirmButton: false,
+                timer: 3000
+            });
+        } else if (recoverPassword.message === 'notIsMail') {
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'E-Mail Inválido',
+                text: 'El correo ingresado no es válido.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        } else if (recoverPassword.message === 'notFound') {
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'E-Mail no encontrado',
+                text: 'El correo no se encuentra registrado.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
+    } catch (error) {
+        throw new Error('Error al enviar el correo');
+    }
+
 })

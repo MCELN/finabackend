@@ -79,9 +79,31 @@ const sendDeleteProductPremium = async (user, product) => {
     });
 }
 
+const sendRecoverPassword = async (user, recoverLink) => {
+    const emailBody = `
+        <div>
+            <h1>Hola ${user.first_name}!!</h1>
+            <p>Para crear una nueva contraseña, haga click en el siguiente enlace.</p>
+            <p>El link expirará en 10 minutos.</p>
+            <p>Si usted no ha pedido una nueva contraseña, ignore este correo.</p>
+            <a href="${recoverLink}" style="text-decoration: none;">
+            <button type="button" style="background-color: #3498db; color: #ffffff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Crear nueva contraseña</button>
+        </a>
+        </div>
+    `;
+
+    await transport.sendMail({
+        from: mailer.userMail,
+        to: user.email,
+        subject: 'Recuperar contraseña',
+        html: emailBody
+    });
+}
+
 module.exports = {
     sendVerifyMail,
     sendTicket,
     sendPremiumUp,
     sendDeleteProductPremium,
+    sendRecoverPassword,
 };

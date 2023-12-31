@@ -20,6 +20,8 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: Date.now(),
     },
+    recoverPassLink: String,
+    recoverTime: Number,
 });
 
 userSchema.methods.serialize = function () {

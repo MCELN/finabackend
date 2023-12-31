@@ -7,6 +7,7 @@ const { generateToken, authToken } = require('../utils/jwt.util');
 const passport = require('passport');
 const { sendVerifyMail } = require('../utils/send-mail.util');
 const protectedRouteLogin = require('../middlewares/protected-route-login');
+const validateEmail = require('../utils/validate-email.util');
 
 const router = Router();
 
@@ -110,6 +111,59 @@ router.get('/githubcallback',
         };
     },
 );
+
+router.put('/recover-password', async (req, res) => {
+    try {
+        const email = req.body.email;
+        if (!validateEmail(email)) {
+            return res.status(404).json({ status: 'error', message: 'notIsMail' });
+        }
+        const user = await userService.getOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ status: 'error', message: 'notFound' });
+        }
+
+        await userService.recoverPasswordLink(user)
+
+        res.json({ status: 'success', message: 'ok' });
+    } catch (error) {
+        req.logger.error(error);
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    }
+})
+
+router.get('/recover-password/:uid/:linkRecover', async (req, res) => {
+    try {
+        const { uid, linkRecover } = req.params;
+        const deprecate = await userService.isValidateLink(uid, linkRecover);
+
+        res.render(
+            'recover-password',
+            {
+                style: 'home.css',
+                deprecate,
+                uid,
+            }
+        )
+
+    } catch (error) {
+        req.logger.error(error);
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    }
+})
+
+router.put('/change-password/:uid', async (req, res) => {
+    try {
+        const { uid } = req.params;
+        const { password, rePassword } = req.body;
+        const response = await userService.changePassword(uid, password, rePassword);
+        res.status(201).json({ status: 'success', message: response });
+    } catch (error) {
+        req.logger.error(error);
+        res.status(500).json({ status: 'error', error: 'Internal error' });
+    }
+})
 
 router.put('/verify/:uid/resend', authToken, async (req, res) => {
     try {
