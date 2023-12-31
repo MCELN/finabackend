@@ -13,6 +13,7 @@ describe('Test products service', function () {
         await mongoose.connection.collections.products.drop();
     });
 
+    const id = null;
     const mockProduct = {
         title: 'test',
         description: 'test',
@@ -21,7 +22,8 @@ describe('Test products service', function () {
         code: 'test4',
         status: true,
         category: 'test',
-        stock: 1
+        stock: 1,
+        createdBy: null,
     };
 
     const mockProductUpdate = {
@@ -32,7 +34,7 @@ describe('Test products service', function () {
 
     it('Debe crear un nuevo producto con id de mongo', async function () {
         this.timeout(10000);
-        const result = await productsService.create(mockProduct);
+        const result = await productsService.create(id, mockProduct);
         createdProductId = result._id;
         expect(result).to.have.property('_id');
     });
