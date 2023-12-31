@@ -20,7 +20,6 @@ Este proyecto forma parte del curso de Backend en Coderhouse y proporciona una A
    ```bash
    npm run start:dev-mongo
    ```
-   La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
 ## Funcionalidades Principales
 
